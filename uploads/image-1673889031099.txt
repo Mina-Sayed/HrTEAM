@@ -1,0 +1,784 @@
+import HOC from "../../../components/HOC/HOC";
+import styles from "./Tasks.module.css";
+// import { useTranslation } from "react-i18next";
+// import { ReactComponent as UserIcon } from "./images/user.svg";
+
+// import React from "react";
+// import { useState, useEffect } from "react";
+// import { ReactComponent as CloseIcon } from "./images/close.svg";
+// import Modal from "react-bootstrap/Modal";
+// import { ReactComponent as PinkIcon } from "./images/pink-icon.svg";
+
+// import { ReactComponent as DateIcon } from "./images/date.svg";
+// import Calendar from "react-calendar";
+// import dayjs from "dayjs";
+// import { getCompanyBranches } from "../../services/branches";
+
+// import makeAnimated from "react-select/animated";
+// import { default as ReactSelect } from "react-select";
+// import { components } from "react-select";
+// import axios from "axios";
+// import { BASE_URL } from "../../requsetMethod";
+// const Option = (props) => {
+//   return (
+//     <div>
+//       <components.Option {...props}>
+//         <input
+//           type="checkbox"
+//           checked={props.isSelected}
+//           onChange={() => null}
+//         />{" "}
+//         <label>{props.label}</label>
+//       </components.Option>
+//     </div>
+//   );
+// };
+
+// const MultiValue = (props) => (
+//   <components.MultiValue {...props}>
+//     <span>{props.data.label}</span>
+//   </components.MultiValue>
+// );
+
+// const animatedComponents = makeAnimated();
+
+// export const colourOptions = [
+//   { value: "ocean1", label: "Ocean" },
+//   { value: "blue", label: "Blue" },
+//   { value: "purple", label: "Purple" },
+//   { value: "red", label: "Red" },
+//   { value: "orange", label: "Orange" },
+//   { value: "yellow", label: "Yellow" },
+//   { value: "green", label: "Green" },
+//   { value: "forest", label: "Forest" },
+//   { value: "slate", label: "Slate" },
+//   { value: "silver", label: "Silver" },
+// ];
+import { ReactComponent as UserIcon } from "./images/user.svg";
+import { ReactComponent as CloseIcon } from "./images/close.svg";
+import { ReactComponent as DateIcon } from "./images/date.svg";
+import Modal from "react-bootstrap/Modal";
+import dayjs from "dayjs";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+
+const TasksPage = () => {
+  //   const [t, { language }] = useTranslation();
+  //   const [date, setDate] = useState([new Date(), new Date()]);
+
+  //   const [taskList, setTaskList] = useState([]);
+
+  //   // ===============================================================
+  //   const [name, setName] = useState("");
+  //   const USERS = [
+  //     { id: 1, name: "Andy" },
+  //     { id: 2, name: "Bob" },
+  //     { id: 3, name: "Tom Hulk" },
+  //     { id: 4, name: "Tom Hank" },
+  //     { id: 5, name: "Audra" },
+  //     { id: 6, name: "Anna" },
+  //     { id: 7, name: "Tom" },
+  //     { id: 8, name: "Tom Riddle" },
+  //     { id: 9, name: "Bolo" },
+  //   ];
+
+  //   const [foundUsers, setFoundUsers] = useState(USERS);
+
+  //   const filter = (e) => {
+  //     const keyword = e.target.value;
+
+  //     if (keyword !== "") {
+  //       const results = USERS.filter((user) => {
+  //         return user.name.toLowerCase().startsWith(keyword.toLowerCase());
+  //         // Use the toLowerCase() method to make it case-insensitive
+  //       });
+  //       setFoundUsers(results);
+  //     } else {
+  //       setFoundUsers(USERS);
+  //       // If the text field is empty, show all users
+  //     }
+
+  //     setName(keyword);
+  //     console.log(name);
+  //   };
+
+  //   // ==========================================handleSelected===============
+  //   const [selectedName, setSelectedName] = useState("");
+  //   function handleSelected(e) {
+  //     console.log();
+  //   }
+
+  //   // -----------------------------------handle modal--------------------------------
+
+  //   const [modalShow, setModalShow] = useState();
+
+  //   const showModalShow = () => {
+  //     setModalShow(true);
+  //   };
+
+  //   const handleClose = () => {
+  //     setModalShow(false);
+  //   };
+  //   function addTask() {
+  //     setModalShow(false);
+  //   }
+
+  //   // =======================================handle title title==================
+
+  //   // ===================================handle SUbject==========================
+  //   const [subject, setSubject] = useState("");
+  //   function handleSubject(e) {
+  //     setSubject(e.target.value);
+  //   }
+
+  //   // ======================================= handle status ================================
+  //   const [status, setStatus] = useState({});
+
+  //   // }
+
+  //   // =======================================Add task=============================
+
+  //   function addTask() {
+  //     console.log();
+  //     setTaskList([...taskList, { title, subject, date, status, name }]);
+  //     setModalShow(false);
+  //     setName([]);
+  //   }
+
+  //   // ==================================================calender=================================
+
+  //   const [isActive, setActive] = useState("false");
+
+  //   const ToggleClass = () => {
+  //     setActive(!isActive);
+  //     console.log(isActive);
+  //   };
+
+  //   // =========================================================priorty function==============================
+
+  //   const [branchList, setBranchList] = useState([]);
+  //   useEffect(() => {
+  //     const companyId = localStorage.getItem("companyId");
+
+  //     const getBranches = async () => {
+  //       const data = await getCompanyBranches(companyId);
+  //       console.log(data, "ffffffffffffffffffffffff");
+  //       setBranchList(data.data);
+  //     };
+  //     getBranches();
+  //   }, []);
+
+  //   const [selectedBranch, setSelectedBranch] = useState(null);
+  //   const [employeesList, setEmployeesList] = useState([]);
+
+  //   useEffect(() => {
+  //     if (selectedBranch) {
+  //       const getEmployeesByBranch = async (branchId) => {
+  //         try {
+  //           const { data } = await axios.get(
+  //             `${BASE_URL}/user/employees/branch/${branchId}`
+  //           );
+  //           console.log(data.data);
+  //           setEmployeesList(data.data);
+  //         } catch (error) {}
+  //       };
+  //       getEmployeesByBranch(selectedBranch);
+  //     }
+  //   }, [selectedBranch]);
+
+  //   const [optionSelected, setOptionSelected] = useState(null);
+
+  //   const handleChange = (selected) => {
+  //     setOptionSelected(selected);
+  //   };
+
+  //   const [assignedEmployees, setAssignedEmployees] = useState([]);
+
+  //   const taskSubmit = async () => {
+  //     try {
+  //       const res = await axios.post(`${BASE_URL}/task`, {
+  //         start: date[0],
+  //         end: date[1],
+  //         title: title,
+  //         description: subject,
+  //         to: assignedEmployees,
+  //       });
+  //       console.log(res);
+  //     } catch (error) {}
+  //   };
+
+  //   useEffect(() => {
+  //     const getAllTasks = async () => {
+  //       try {
+  //         const { data } = await axios.get(`${BASE_URL}/task`);
+  //         console.log(data.tasks, "tasks ........................");
+  //         setTaskList(data.tasks);
+  //       } catch (error) {}
+  //     };
+
+  //     getAllTasks();
+  //   }, []);
+  const [modalShow, setModalShow] = useState();
+
+  const showModalShow = () => {
+    setModalShow(true);
+  };
+
+  const handleClose = () => {
+    setModalShow(false);
+  };
+  const { value: mode } = useSelector((state) => state).mode;
+  const { value: lang } = useSelector((state) => state).lang;
+  const chartBGColor = mode === "light" ? "#fff" : "#3E3E42";
+  const [title, setTitle] = useState("");
+  function handleTitle(e) {
+    setTitle(e.target.value);
+  }
+  return (
+    <HOC>
+      <div>
+        <div className={`overflow-hidden p-3`}>
+          <div
+            className="p-4"
+            style={{ backgroundColor: chartBGColor, borderRadius: "25px" }}
+          >
+            <h1
+              className={`text-center my-4 h3 ${
+                mode === "light" ? "text-dark" : "text-white"
+              }`}
+            >
+              {/* {t("All Tasks")} */}
+
+              {lang === "en" ? "All Tasks" : "جميع المهمات"}
+            </h1>
+
+            {/* ============================================ tasks ==================================================================== */}
+            <div className="row justify-content-center mt-5">
+              {/* TaskList */}
+              {[...Array(3)].map((_, index) => (
+                <div key={index} className={` col-lg-4 col-md-6 col-xl-3 m-3`}>
+                  <div
+                    className={` ${styles.columContent}`}
+                    style={{
+                      backgroundColor: mode === "light" ? "#E4E4E4" : "#333333",
+
+                      color: mode === "dark" ? "#fff" : undefined,
+                    }}
+                  >
+                    <div className="p-3  ">
+                      <div className="d-flex  w-100 justify-content-between align-items-center ">
+                        <div className="d-flex  w-25 flex-column justify-content-center ">
+                          <div>
+                            <UserIcon className="w-100" />
+                          </div>
+                          <div className="d-flex align-items-center  ">
+                            <span
+                              className="fw-bold "
+                              style={{ color: "#0077B6", fontWeight: "bold" }}
+                            >
+                              {lang === "en" ? "To:" : "إلي:"}
+                            </span>
+                            {/* task.to */}
+                            {[...Array(1)].map((_, index) => (
+                              <span key={index}>
+                                {lang === "en" ? "Mohamed" : "محمد"}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="d-flex flex-column mx-3  w-75  ">
+                          <h4
+                            className="py-2 px-2"
+                            style={{
+                              // backgroundColor: `${task.status.backgroundColor}`,
+                              color: mode === "light" ? "#000" : "#fff",
+                              borderRadius: "10px",
+                            }}
+                          >
+                            {lang === "en"
+                              ? `Task ${index + 1}`
+                              : `مهمة ${index + 1}`}
+                          </h4>
+                          <p className="py-2 px-2">
+                            {lang === "en" ? "subject" : "الموضوع"}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className=" p-2 ">
+                      <div
+                        className="  px-3 py-2  "
+                        style={{ marginBottom: "20px" }}
+                      >
+                        <div className=" w-100  ">
+                          {/* data.length > 0  */}
+                          {true ? (
+                            <div
+                              className="d-flex   justify-content-between flex-column justify-content-center "
+                              style={{ fontSize: "13px" }}
+                            >
+                              <div className=" ">
+                                <div className="">
+                                  <span
+                                    className="fw-bold"
+                                    style={{ color: "#0077B6" }}
+                                  >
+                                    {lang === "en"
+                                      ? "Start Date"
+                                      : "تاريخ البدأ"}
+                                    :
+                                  </span>
+                                  <span>
+                                    {/* {dayjs(`${date[0].toDateString()}`).format(
+                                    "DD/MM/YYYY"
+                                  )} */}
+                                    {lang === "en" ? "date" : "التاريخ"}:
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="d-flex    ">
+                                <div className="">
+                                  <span
+                                    className="fw-bold  "
+                                    style={{ color: "#0077B6" }}
+                                  >
+                                    {lang === "en"
+                                      ? " End Date:"
+                                      : "تاريخ الانتهاء:"}
+                                    :
+                                  </span>
+                                  <span>
+                                    {/* {dayjs(`${date[1].toDateString()}`).format(
+                                    "DD/MM/YYYY"
+                                  )} */}
+                                    {lang === "en" ? "date" : "التاريخ"}:
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          ) : undefined}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* ===================================================== end of tasks ============================================== */}
+            {/* {branchList?.map((branch) => (
+            <>
+              <h3 className="my-5">{branch?.name}</h3>
+              <div className={`row g-4  `}>
+
+                {taskList.map((task, index) => (
+                  <div key={index} className={` col-lg-4 col-md-6 col-xl-3`}>
+                    <div
+                      className={`  ${styles.columContent}`}
+                      style={{ backgroundColor: "var(--blue-background)" }}
+                    >
+                      <div className="p-3  ">
+                        <div className="d-flex  w-100 justify-content-between align-items-center ">
+                          <div className="d-flex  w-25 flex-column justify-content-center ">
+                            <div>
+                              <UserIcon className="w-100" />
+                            </div>
+                            <div className="d-flex align-items-center  ">
+                              <span
+                                className="fw-bold  "
+                                style={{ color: "#FF2366" }}
+                              >
+                                To:
+                              </span>
+                              {task.search.map((item) => (
+                                <span>{item},</span>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="d-flex flex-column mx-3  w-75  ">
+                            <h4
+                              className="py-2 px-2"
+                              style={{
+                                backgroundColor: `${task.status.backgroundColor}`,
+                                color: `${task.status.color}`,
+                                borderRadius: "10px",
+                              }}
+                            >
+                              {task.title}
+                            </h4>
+                            <p className="py-2 px-2"> {task.subject}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className=" p-2 ">
+                        <div
+                          className="  px-3 py-2  "
+                          style={{ marginBottom: "20px" }}
+                        >
+                          <div className=" w-100  ">
+                            {date.length > 0 ? (
+                              <div
+                                className="d-flex   justify-content-between flex-column justify-content-center "
+                                style={{ fontSize: "13px" }}
+                              >
+                                <div className=" ">
+                                  <div className="">
+                                    <span
+                                      className="fw-bold"
+                                      style={{ color: "#FF2366" }}
+                                    >
+                                      Start Date:
+                                    </span>
+                                    <span>
+                                      {dayjs(
+                                        `${date[0].toDateString()}`
+                                      ).format("DD/MM/YYYY")}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div className="d-flex    ">
+                                  <div className="">
+                                    <span
+                                      className="fw-bold  "
+                                      style={{ color: "#FF2366" }}
+                                    >
+                                      End Date:
+                                    </span>
+                                    <span>
+                                      {dayjs(
+                                        `${date[1].toDateString()}`
+                                      ).format("DD/MM/YYYY")}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.iconContainer} onClick={showModalShow}>
+                <button
+                  className="rounded-pill px-2 "
+                  onClick={() => {
+                    setSelectedBranch(branch._id);
+                    console.log(branch._id);
+                  }}
+                >
+                  {t("Add Task")}
+                  <i className="fa-solid fa-plus mx-2"></i>
+                </button>
+              </div>
+            </>
+          ))} */}
+
+            <div className={styles.iconContainer} onClick={showModalShow}>
+              <button
+                className="rounded-pill px-2 "
+                // onClick={() => {
+                //   setSelectedBranch(branch._id);
+                //   console.log(branch._id);
+                // }}
+              >
+                {/* {t("Add Task")} */}
+                {lang === "en" ? "Add Task" : "إضافة مهمة"}:
+                <i className="fa-solid fa-plus mx-2"></i>
+              </button>
+            </div>
+          </div>
+
+          {/* =======================================================modal================================================ */}
+
+          <Modal
+            show={modalShow}
+            onHide={handleClose}
+            size="lg"
+            className={`p-4 ${styles.modal} `}
+            style={{ overflow: "hidden", maxHeight: "fit-content" }}
+          >
+            <Modal.Header>
+              <Modal.Title
+                id="contained-modal-title-vcenter"
+                className=" w-100 border-none"
+              >
+                <h3
+                  className=" text-center "
+                  style={{ color: "var(--text-color)" }}
+                >
+                  {/* {t("Create anew task")} */}
+                  {lang === "en" ? "Create anew task" : "عمل مهمة جديدة"}:
+                </h3>
+              </Modal.Title>
+            </Modal.Header>
+            <Modal.Body style={{ color: "var(--text-color)" }}>
+              <div className="container  m-auto">
+                <div className="row">
+                  {/* =================================================title input============================ */}
+                  <div className=" col-lg-5 mb-3 ">
+                    <label
+                      htmlFor="taskTitle"
+                      className="form-label text-dark fw-bold"
+                    >
+                      {/* {t("Title")} */}
+                      {lang === "en" ? "Title" : "العنوان"}:
+                    </label>
+                    <div className="form-control d-flex justify-content-between align-items-center">
+                      <input
+                        type="text"
+                        placeholder="Write here...  "
+                        className="border-0 outline-0"
+                        id="taskTitle"
+                        onChange={handleTitle}
+                      />
+                      <CloseIcon style={{ cursor: "pointer" }} />
+                    </div>
+                  </div>
+
+                  {/* ---------------------------------------------------employee  input --------------------*/}
+
+                  <div className=" col-lg-5 mb-3 offset-lg-1">
+                    <label
+                      htmlFor="assignTo"
+                      className="form-label text-dark fw-bold "
+                    >
+                      {/* {t("Assign to")} */}
+                      {lang === "en" ? "Assign to" : "تعيين إلي"}:
+                    </label>
+
+                    {/* <ReactSelect
+                    options={employeesList.map((employee) => ({
+                      label: employee.fullName_en,
+                      value: employee._id,
+                    }))}
+                    isMulti
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    components={{
+                      Option,
+                      MultiValue,
+                      animatedComponents,
+                    }}
+                    onChange={(selected) => {
+                      handleChange(selected);
+                      const filteredIds = selected.map(({ value }) => value);
+                      setAssignedEmployees(filteredIds);
+                    }}
+                    allowSelectAll={true}
+                    value={optionSelected}
+                    menuShouldScrollIntoView={false}
+                  /> */}
+
+                    {/* <input
+        type="search"
+        value={name}
+        onChange={filter}
+        className={styles.input}
+        placeholder="Filter"
+      /> */}
+
+                    {/* <div className={styles.container}>
+
+      <div className="user-list">
+        {foundUsers && foundUsers.length > 0 ? (
+          <select multiple size="3">
+          {foundUsers.map((user) => (
+            <>
+              <option>{user.name}</option>
+             <li key={user.id} className={styles.user} onClick={handleSelected}>
+              <span className="user-id">{user.id}</span>
+              <span className="user-name">{user.name}</span>
+
+            </li>
+            </>
+          ))}
+            </select>
+        ) : (
+          <h1>No results found!</h1>
+        )}
+      </div>
+    </div> */}
+                  </div>
+
+                  {/* =================================================date input============================ */}
+
+                  <div className=" col-lg-5 mb-3 ">
+                    <label
+                      htmlFor="taskTitle"
+                      className="form-label text-dark fw-bold"
+                    >
+                      {/* {t("Start Date")} */}
+                      {lang === "en" ? "Start Date" : "تاريخ البدأ"}:
+                    </label>
+                    <div className="form-control d-flex justify-content-between align-items-center">
+                      <input
+                        type="text"
+                        readOnly
+                        placeholder="choose Date...  "
+                        // value={`${dayjs(`${date[0].toDateString()}`).format(
+                        //   "DD/MM/YYYY"
+                        // )} : ${dayjs(`${date[1].toDateString()}`).format(
+                        //   "DD/MM/YYYY"
+                        // )}`}
+                        className="w-100 border-0 outline-0"
+                        id="taskTitle"
+                        // onClick={ToggleClass}
+                      />
+                      <DateIcon
+                        style={{ cursor: "pointer" }}
+                        // onClick={ToggleClass}
+                      />
+                    </div>
+
+                    {/* ============================================calender============================================== */}
+
+                    {/* <Calendar
+                    onChange={setDate}
+                    value={date}
+                    selectRange={true}
+                    className={isActive ? "d-none" : "d-block"}
+                    style={{ color: "black" }}
+                  /> */}
+                  </div>
+
+                  {/* ==========================================================status=================================================== */}
+                  <div className="col-lg-5 mb-3 offset-lg-1">
+                    <label
+                      htmlFor="asignTo"
+                      className="form-label text-dark fw-bold "
+                    >
+                      {/* {t("Status")} */}
+                      {lang === "en" ? "Status" : "حالة"}:
+                    </label>
+                    <div className=" d-flex justify-content-between align-items-center ">
+                      <div
+                        className="px-2 py-2 d-flex align-items-center justify-content-center "
+                        style={{
+                          backgroundColor: "#faaec5",
+                          color: "#FF2366",
+                          width: "100px",
+                          height: "30px",
+                          cursor: "pointer",
+                          borderRadius: "5px",
+                        }}
+                        // onClick={() =>
+                        //   setStatus({
+                        //     backgroundColor: "#faaec5",
+                        //     color: "#FF2366",
+                        //   })
+                        // }
+                      >
+                        <span className="fw-bold m-0">Heigh priorty</span>
+                      </div>
+                      <div
+                        className=" px-2 py-2 d-flex align-items-center justify-content-center"
+                        style={{
+                          backgroundColor: "#f8f2db",
+                          color: "#FFD950",
+                          width: "90px",
+                          height: "30px",
+                          cursor: "pointer",
+                          borderRadius: "5px",
+                        }}
+                        // onClick={() =>
+                        //   setStatus({
+                        //     backgroundColor: "#f8f2db",
+                        //     color: "#FFD950",
+                        //   })
+                        // }
+                      >
+                        <span className="fw-bold">
+                          {lang === "en" ? "Important" : "مهم"}:
+                        </span>
+                      </div>
+                      <div
+                        className=" px-2 py-2 d-flex align-items-center justify-content-center"
+                        style={{
+                          backgroundColor: "#b6fae1",
+                          color: "#02BC77",
+                          width: "90px",
+                          height: "30px",
+                          cursor: "pointer",
+                          borderRadius: "5px",
+                        }}
+                        // onClick={() =>
+                        //   setStatus({
+                        //     backgroundColor: "#b6fae1",
+                        //     color: "#02BC77",
+                        //   })
+                        // }
+                      >
+                        <span className="fw-bold">
+                          {lang === "en" ? "Normal" : "طبيعي"}:
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* =================================================subject======================================================== */}
+
+                  <div className="col-lg-5 mb-3">
+                    <label
+                      htmlFor="taskSubject"
+                      className="form-label text-dark fw-bold"
+                    >
+                      {/* {t("Subject")} */}
+                      {lang === "en" ? "Subject" : "الموضوعات"}:
+                    </label>
+                    <div className="form-control d-flex justify-content-between align-items-center">
+                      <input
+                        type="text"
+                        placeholder="Write here...  "
+                        className="border-0 outline-0"
+                        id="taskSubject"
+                        // onChange={handleSubject}
+                      />
+                      <CloseIcon style={{ cursor: "pointer" }} />
+                    </div>
+                  </div>
+
+                  {/* =================================================sub Task======================================================== */}
+
+                  <div className="col-lg-5 mb-3 offset-lg-1">
+                    <label
+                      htmlFor="taskSubTask"
+                      className="form-label text-dark fw-bold"
+                    >
+                      {/* {t("Sub Task")} */}
+                      {lang === "en" ? "Sub Task" : "مهمة فرعية"}:
+                    </label>
+                    <div className="form-control d-flex justify-content-between align-items-center">
+                      <input
+                        type="text"
+                        placeholder="Write here...  "
+                        className="border-0 outline-0"
+                        id="taskSubTask"
+                      />
+                      <CloseIcon style={{ cursor: "pointer" }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Modal.Body>
+            <Modal.Footer className="w-100">
+              <button
+                className="n py-1 ms-auto h-25 rounded-pill px-3 "
+                // onClick={taskSubmit}
+              >
+                {lang === "en" ? "Create" : "عمل"}:
+              </button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      </div>
+    </HOC>
+  );
+};
+export default TasksPage;

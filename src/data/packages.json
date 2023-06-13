@@ -1,0 +1,35 @@
+[
+    {
+        "_id": "633802329048e46ea4757775",
+        "name_ar": "صغيرة",
+        "name_en": "small",
+        "duration": 12,
+        "sale": 0,
+        "maxCompaniesAllowed": 1,
+        "maxEmployeesAllowed": 100,
+        "price_SR": 500,
+        "price_USD": 125
+    },
+    {
+        "_id": "6338023a6e4548689cc13f9d",
+        "name_ar": "متوسطة",
+        "name_en": "medium",
+        "duration": 12,
+        "sale": 10,
+        "maxCompaniesAllowed": 1,
+        "maxEmployeesAllowed": 500,
+        "price_SR": 1000,
+        "price_USD": 250
+    },
+    {
+        "_id": "6338024b9600123e67781b61",
+        "name_ar": "كبيرة",
+        "name_en": "large",
+        "duration": 12,
+        "sale": 12,
+        "maxCompaniesAllowed": 3,
+        "maxEmployeesAllowed": 2000,
+        "price_SR": 2000,
+        "price_USD": 500
+    }
+]

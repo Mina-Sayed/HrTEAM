@@ -1,0 +1,13 @@
+
+RewriteEngine On
+RewriteCond %{SERVER_PORT} 80
+RewriteRule ^(.*)$ https://www.sarri.sa/$1 [R,L]
+RewriteCond %{HTTP_HOST} ^sarri\.sa [NC]
+RewriteCond %{HTTP_HOST} ^sarri.sa$
+RewriteRule (.*) http://www.sarri.sa$1 [R=301,L]
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ./index.html [L]
+
+

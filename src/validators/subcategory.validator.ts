@@ -1,0 +1,27 @@
+import Joi from "joi";
+import { IRequest } from "../models/request";
+import { ISubCategory } from "../models/subCategory";
+
+
+export function validateSubCategory(subCategory: ISubCategory)
+{
+
+    // check the truthness of have time 
+    // const haveTime = subCategory.haveTime;
+    const schema = Joi.object({
+        subType: Joi.string().alter({
+            post: (schema) => schema.required(),
+            put: (schema) => schema.forbidden(),
+        }),
+        haveTime: Joi.boolean().alter({
+            post: (schema: any) => schema.required(),
+            put: (schema: any) => schema.forbidden(),
+        }),
+        category: Joi.object().alter({
+            post: (schema: any) => schema.required(),
+            put: (schema: any) => schema.forbidden(),
+        }),
+
+    });
+    return schema.validate(subCategory);
+}
