@@ -10,7 +10,7 @@ export interface IPost {
     creator: mongoose.Schema.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
-}
+};
 
 const PostSchema = new Schema<IPost>({
     title: {
