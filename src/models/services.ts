@@ -8,7 +8,7 @@ export interface IService extends Document {
     creator: mongoose.Schema.Types.ObjectId;
     createdAt: Date;
     updatedAt: Date;
-}
+};
 
 const ServicesSchema = new Schema<IService>({
     title: {
