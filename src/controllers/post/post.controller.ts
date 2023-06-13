@@ -43,7 +43,7 @@ export const createPost = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({ error: "Internal server error" });
     }
-};
+}
 
 export const getAllPosts = async (req: Request, res: Response) => {
     try {
