@@ -10,7 +10,7 @@ export const createService = async (req: Request, res: Response) => {
             content,
             image,
             creator,
-        });
+        })
 
         const savedService = await newService.save();
 
