@@ -1,17 +1,70 @@
 import { Request, Response } from "express";
 import Post,{ IPost } from "../../models/posts";
+import multer from "multer";
+import { Types } from "mongoose";
 
 
-export const createComment = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { title, content, comments, image }: IPost = req.body;
-    const newPost = await Post.create({ title, content, comments, image });
-    res.status(201).json(newPost);
-  } catch (error) {
-    console.error("Error creating post:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-};
+
+
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, "uploads/"); // Set the destination folder where the uploaded files will be stored
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, file.fieldname + "-" + uniqueSuffix + ".jpg"); // Set the file naming convention
+    },
+  });
+
+
+
+// Create a multer instance with the storage configuration
+const upload = multer({ storage: storage });
+
+
+
+
+
+
+export const createComment = async (req: Request, res: Response) => {
+    try {
+      const { title, content, comments, image } = req.body;
+  
+      // Access the uploaded file through req.file
+      if (req.file) {
+        console.log("Uploaded image:", req.file.filename);
+  
+        // Create a new post with the file path
+        const newPost: IPost = new Post({
+          title,
+          content,
+          image: req.file.path, // Set the file path in the database
+          comments: Array.isArray(comments) ? comments.map((comment: string) => new Types.ObjectId(comment)) : [],
+        });
+  
+        await newPost.save();
+  
+        return res.status(201).json(newPost);
+      } else {
+        console.log("No image uploaded");
+  
+        // Create a new post without the file path
+        const newPost: IPost = new Post({
+          title,
+          content,
+          comments: Array.isArray(comments) ? comments.map((comment: string) => new Types.ObjectId(comment)) : [],
+        });
+  
+        await newPost.save();
+  
+        return res.status(201).json(newPost);
+      }
+    } catch (error) {
+      console.error("Error creating post:", error);
+      return res.status(500).json({ error: "Failed to create post" });
+    }
+  };
 
 export const getAllPosts = async (req: Request, res: Response) => {
     try {
