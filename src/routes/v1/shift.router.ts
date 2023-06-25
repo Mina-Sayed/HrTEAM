@@ -1,4 +1,4 @@
-import { authShiftDepartment } from "../../middlewares/authorization/shift.authorization";
+import { AuthuthrationShift_Department } from './../../middlewares/authuthrations/shift.authuthration'
 import {
   addShift,
   getAllShifts,
@@ -7,68 +7,66 @@ import {
   addWorkDays,
   updateShift,
   deleteShift,
-} from "../../controllers/shifts/shift.controller";
-import { validator } from "../../middlewares/validator";
-import { Roles } from "../../types/enums";
-import { authMiddleware } from "../../middlewares/auth";
-import { Router } from "express";
-import { checkRole } from "../../middlewares/access";
-import { checkSubscribe } from "../../middlewares/subscription";
-import { validateShift } from "../../validators/shift.validators";
-
-
-const router: Router = Router();
+} from './../../controllers/shifts/shift.controller'
+import { validator } from './../../middlewares/validate'
+import { Roles } from './../../types/enums'
+import { AuthenticationMiddleware } from './../../middlewares/auth'
+import { Router, Response, Request, NextFunction } from 'express'
+import { checkRole } from '../../middlewares/acsses'
+import { checkSubscripe } from '../../middlewares/subscription'
+import { validateShift } from '../../validators/shift.validators'
+const router: Router = Router()
 router
-  .route("")
+  .route('')
   .all(
-    authMiddleware,
-    checkSubscribe,
+    AuthenticationMiddleware,
+    checkSubscripe,
     checkRole(Roles.ROOT, Roles.ADMIN),
   )
   .post(
-    validator(validateShift, "post"),
-    authShiftDepartment("shift"),
+    validator(validateShift, 'post'),
+    AuthuthrationShift_Department('shift'),
     addShift,
-  );
+  )
 router
-  .route("/:branch")
+  .route('/:branch')
   .all(
-    authMiddleware,
-    authShiftDepartment("shift"),
-    checkSubscribe,
+    AuthenticationMiddleware,
+    AuthuthrationShift_Department('shift'),
+    checkSubscripe,
     checkRole(Roles.ROOT, Roles.ADMIN, Roles.EMPLOYEE),
   )
-  .get(getAllShifts);
+  .get(getAllShifts)
 router
-  .route("/:branch/:id")
+  .route('/:branch/:id')
   .all(
-    authMiddleware,
-    checkSubscribe,
+    AuthenticationMiddleware,
+    checkSubscripe,
     checkRole(Roles.ROOT, Roles.ADMIN),
   )
-  .get(authShiftDepartment("shift"), getShift)
+  .get(AuthuthrationShift_Department('shift'), getShift)
   .put(
-    authShiftDepartment("shift"),
-    validator(validateShift, "put"),
+    AuthuthrationShift_Department('shift'),
+    validator(validateShift, 'put'),
     updateShift,
   )
-  .delete(deleteShift);
+  .delete(deleteShift)
 router
-  .route("holidays/:branch/:id")
+  .route('holidays/:branch/:id')
   .all(
-    authMiddleware,
-    authShiftDepartment("shift"),
-    checkSubscribe,
+    AuthenticationMiddleware,
+    AuthuthrationShift_Department('shift'),
+    checkSubscripe,
     checkRole(Roles.ROOT, Roles.ADMIN),
   )
-  .post(addHolidays);
+  .post(addHolidays)
 router
-  .route("workdays/:branch/:id")
+  .route('workdays/:branch/:id')
   .all(
-    authMiddleware,
-    authShiftDepartment("shift"),
-    checkSubscribe,
+    AuthenticationMiddleware,
+    AuthuthrationShift_Department('shift'),
+    checkSubscripe,
     checkRole(Roles.ROOT, Roles.ADMIN),
   )
-  .post(addWorkDays);
-export default router;
+  .post(addWorkDays)
+export default router

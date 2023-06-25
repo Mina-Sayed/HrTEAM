@@ -1,21 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
-import User from "../models/user";
+import User from "../models/User";
 
 const checkUserFound = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, id } = req.body;
-  const userId = new mongoose.Types.ObjectId(id);
+    console.log(req.params.id)
 
-  try {
-    const user = await User.findOne({ email, _id: { $ne: userId } });
-    if (user) {
-      return res.status(400).send("User already registered.");
-    }
+    console.log(new mongoose.Types.ObjectId(req.params.id))
+    let user = await User.findOne({ email: req.body.email, _id: { $ne: new mongoose.Types.ObjectId(req.params.id) } });
+    console.log(user)
+    if (user !== null) return res.status(400).send('User already registered.');
     next();
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal server error.");
-  }
-};
+}
 
 export default checkUserFound;

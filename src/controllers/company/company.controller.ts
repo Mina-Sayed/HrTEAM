@@ -1,203 +1,178 @@
-import { NextFunction, Response } from "express";
-import { AuthenticatedReq } from "../../middlewares/auth";
-import { Company } from "../../models/company";
-import Subscription from "../../models/subscription";
-import User from "../../models/user";
-import { Branch } from "../../models/branch";
-import { Department } from "../../models/department";
-import { Shift } from "../../models/shift";
-import { Attendance } from "../../models/attendance";
-import { Break } from "../../models/break";
-import Request from "../../models/request";
-import Payroll from "../../models/payroll";
-import Contract from "../../models/contract";
-import { Notification } from "../../models/notification";
-import Blog from "../../models/blog";
-import Task from "../../models/task";
-import Subtask from "../../models/subtask";
-import Category from "../../models/category";
+import { NextFunction, Response } from 'express'
+import { AuthenticatedReq } from '../../middlewares/auth'
+import { Company } from '../../models/Company'
+import Subscription from '../../models/Subscription'
+import User from '../../models/User'
+import { FindeById } from '../../validators/find'
+import { Branch } from '../../models/Branch'
+import { Department } from '../../models/Department'
+import { Shift } from '../../models/Shift'
+import { Attendance } from '../../models/attendenc.model'
+import { Break } from '../../models/Break'
+import Request from '../../models/Request'
+import Payrol from '../../models/payrol'
+import Contract from '../../models/Contract'
+import { Notification } from '../../models/notification.model'
+import Blog from '../../models/blog.model'
+import Task from '../../models/task'
+import SubTask from '../../models/subTask'
+import Category from '../../models/Category'
 //@desc         create a company
 //@route        POST /api/v1/company
 //@access       private(root) 
 export const addCompany = async (
-    req: AuthenticatedReq,
-    res: Response,
-    next: NextFunction,
-) =>
-{
-    try {
-        const { name } = req.body;
-        const ownerId = req.user?._id;
-        const subscription: any = await Subscription.findOne({ subscriber: req.user?._id });
+  req: AuthenticatedReq,
+  res: Response,
+  next: NextFunction,
+) => {
+  const { name } = req.body
+  const ownerId = req.user?._id
+  // get subscripe
+  const subscription: any = await Subscription.findOne({ subscriber: req.user?._id })
+  console.log(subscription);
 
-        // Check if the owner has exceeded the limit of their Companies Allowed
-        const companies: any = await Company.find({ owner: ownerId });
-        if (subscription?.companiesAllowed == companies.length) {
-            return res.status(400).send({
-                error_en: "You have exceeded the limit of your Companies Allowed",
-                error_ar: "لقد تجاوزت الحد المسموح به لشركاتك",
-            });
-        }
-
-        // Check if the company name is unique
-        const nameCo = await Company.findOne({
-            owner: ownerId,
-            name: name,
-        });
-        if (nameCo) {
-            return res.status(400).send({ error_en: "The company name is already in use" });
-        }
-
-        const company = new Company({
-            owner: ownerId,
-            name: name,
-        });
-
-        await company.save();
-
-        res.status(201).send({
-            success: true,
-            data: company,
-            message_en: "Company created successfully",
-        });
-    } catch (error) {
-        console.log(error); // pass the error to the next middleware
-    }
-};
-
-
+  //I:must check how companies the root can added
+  console.log('subcription: form the owner: ', ownerId)
+  const companies: any = await Company.find({ owner: ownerId })
+  if (subscription?.companiesAllowed == companies.length)
+    return res.status(400).send({
+      error_en:
+        "You can't add more of compines becuse You have exceeded the limit of your Companies Allowed",
+      error_ar: 'لا يمكنك إضافة المزيد من المجموعات لأنك تجاوزت الحد المسموح به لشركاتك'
+    })
+  //IV:must the name company be unique
+  const nameCo = await Company.findOne({ owner: ownerId, name: name })
+  if (nameCo)
+    return res
+      .status(400)
+      .send({ error_en: 'The company with the given NAME used befor' })
+  const company = new Company({
+    owner: ownerId,
+    name: name,
+  })
+  res.send({
+    success: true,
+    data: company,
+    message_en: 'company is created successfully',
+  })
+  company.save()
+}
 //@desc         get all companies owner
 //@route        GET /api/v1/company
 //@access       private(root,admin)
 export const getOwnerCompanies = async (
-    req: AuthenticatedReq,
-    res: Response,
-) =>
-{
-    const ownerId = req.user?._id;
-    const companies: any = await Company.find({ owner: ownerId });
-    res.send({
-        success: true,
-        data: companies,
-        message_en: "Companies are fetched successfully",
-    });
-};
+  req: AuthenticatedReq,
+  res: Response,
+) => {
+  const ownerId = req.user?._id
+  const companies: any = await Company.find({ owner: ownerId })
+  res.send({
+    success: true,
+    data: companies,
+    message_en: 'Companies are fetched successfully',
+  })
+}
 //@desc         get a company by name
 //@route        GET /api/v1/company/:id
 //@access       private(root,admin)
 export const getCompanyByName = async (
-    req: AuthenticatedReq,
-    res: Response,
-) =>
-{
-    const ownerId = req.user?._id;
-    const company: any = await Company.findOne({
-        owner: ownerId,
-        _id: req.params.id,
-    });
-    res.status(200).send({
-        success: true,
-        data: company,
-        message_en: "Company is fetched successfully",
-    });
-};
+  req: AuthenticatedReq,
+  res: Response,
+) => {
+  const ownerId = req.user?._id
+  const company: any = await Company.findOne({
+    owner: ownerId,
+    _id: req.params.id,
+  })
+  res.send({
+    success: true,
+    data: company,
+    message_en: 'Company is fetched successfully',
+  })
+}
 //@desc         update a company by name
 //@route        PUT /api/v1/company/:id
 //@access       private(root)
 export const updateCompanyByName = async (
+  req: AuthenticatedReq,
+  res: Response,
+) => {
+  const { name } = req.body
+  const ownerId = req.user?._id
+  const chakeCompany = await Company.findOne({
+    owner: ownerId,
+  })
+  console.log(name);
+
+  if (!chakeCompany)
+    return res
+      .status(400)
+      .send({ error_en: 'The company with the given NAME is not found' })
+  //IV:must the name company be unique
+  const nameCo = await Company.findOne({ name: name, _id: req.params.id })
+  if (nameCo)
+    return res
+      .status(400)
+      .send({ error_en: 'The company with the given NAME used befor' })
+  await Company.updateOne(
+    { owner: ownerId, _id: req.params.id },
     {
-        params,
-        body,
-        user,
-    }: AuthenticatedReq,
-    res: Response,
-) =>
-{
-    const { name } = body;
-    const ownerId = user?._id;
-
-    const company = await Company.findOne({
-        name,
-        _id: params.id,
-    });
-    if (company) {
-        return res
-            .status(400)
-            .send({ error_en: "The company with the given name used before" });
-    }
-
-    const newCompany = await Company.findOneAndUpdate(
-        {
-            owner: ownerId,
-            _id: params.id,
-        },
-        { name },
-        { new: true },
-    );
-    if (!newCompany) {
-        return res
-            .status(404)
-            .send({ error_en: "The company was not found with given name" });
-    }
-
-    res.status(200).send({
-        success: true,
-    });
-};
+      $set: {
+        name: name,
+      },
+    },
+  )
+  const newCompany = await Company.findOne({
+    owner: ownerId,
+    _id: req.params._id,
+  })
+  res.send({
+    success: true,
+    data: newCompany,
+    message_en: 'Company is updated successfully',
+  })
+}
 //@desc         delete a company by id
 //@route        DELETE /api/v1/company/:id
 //@access       private(root)
 
-export const deleteCompanyById = async (req: AuthenticatedReq, res: Response) =>
-{
-    const companyId: string = req.params.id as string;
-
-    if (!companyId) {
-        return res.status(400).send({
-            success: false,
-            message: "Please provide a company id!",
-        });
-    }
-
-    try {
-        const foundCompany = await Company.findOne({ _id: companyId });
-
-        if (!foundCompany) {
-            return res.status(404).send({
-                success: false,
-                message: "The company with the given ID is not found",
-            });
-        }
-
-        const branches = await Branch.find({ company: companyId }, "_id");
-        const branchIds = branches.map((branch) => branch._id);
-
-        await Promise.all([
-            User.deleteMany({ company: companyId }),
-            Department.deleteMany({ branch: { $in: branchIds } }),
-            Shift.deleteMany({ branch: { $in: branchIds } }),
-            Attendance.deleteMany({ branch: { $in: branchIds } }),
-            Request.deleteMany({ branch: { $in: branchIds } }),
-            Payroll.deleteMany({ branch: { $in: branchIds } }),
-            Contract.deleteMany({ branch: { $in: branchIds } }),
-            Branch.deleteMany({ company: companyId }),
-            Notification.deleteMany({ company: companyId }),
-            Blog.deleteMany({ company: companyId }),
-            Task.deleteMany({ company: companyId }),
-            Subtask.deleteMany({ company: companyId }),
-            Category.deleteMany({ company: companyId }),
-            Company.deleteOne({ _id: companyId }),
-        ]);
-
-        res.status(200).send({
-            success: true,
-            message: "Company is deleted successfully",
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send({
-            success: false,
-            message: "An error occurred while deleting the company",
-        });
-    }
-};
+export const deleteCompanyById = async (
+  req: AuthenticatedReq,
+  res: Response,
+) => {
+  const chakeCompany = await Company.findOne({ _id: req.params.id })
+  // if (chakeCompany?.clicked === 0) {
+  //   await Company.updateOne({ clicked: 1 })
+  //   return res.send({
+  //     message_en:
+  //       'If you want delete the company must know you will lose all your data in the company like the employees  , shifts , branches , departments',
+  //     message_ar:
+  //       'إذا كنت ترغب في حذف الشركة ، يجب أن تعلم أنك ستفقد جميع بياناتك في الشركة مثل الموظفين ، ورديات العمل ، والفروع ، والإدارات',
+  //   })
+  // }
+  if (!chakeCompany)
+    return res
+      .status(400)
+      .send({ error_en: 'The company with the given ID is not found' })
+  const branches = (await Branch.find({ company: req.params.id })).map(
+    (branch) => branch._id,
+  )
+  await User.deleteMany({ company: req.params.id })
+  await Company.deleteOne({ _id: req.params.id })
+  await Department.deleteMany({ branch: branches })
+  await Shift.deleteMany({ branch: branches })
+  await Attendance.deleteMany({ branch: branches })
+  await Request.deleteMany({ branch: branches })
+  await Payrol.deleteMany({ branch: branches })
+  await Contract.deleteMany({ branch: branches })
+  await Branch.deleteMany({ company: req.params.id })
+  await Notification.deleteMany({ company: req.params.id })
+  await Blog.deleteMany({ company: req.params.id })
+  await Task.deleteMany({ company: req.params.id })
+  await SubTask.deleteMany({ company: req.params.id })
+  await Category.deleteMany({ company: req.params.id })
+  res.send({
+    success: true,
+    message_en: 'Company is deleted successfully',
+  })
+}

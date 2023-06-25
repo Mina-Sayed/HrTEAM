@@ -1,5 +1,6 @@
-import { getUser } from "../../controllers/user";
-import { authAdminEmployee } from "../../middlewares/authorization/employee_admin.authorization";
+import { getUser } from './../../controllers/user/index';
+import { createUser } from './../../controllers/user/createUser';
+import { AuthuthrationAdminEmployee } from './../../middlewares/authuthrations/employee_admin.authuthration'
 import {
     getAllEmployeesInComapny,
     getAllEmployeesInBranch,
@@ -11,249 +12,245 @@ import {
     getAllEmployeesInShift,
     getAllEmpsBasedOnRole,
     getAllEmployeesInTheCompanyWithBranchAndDepartment,
-} from "../../controllers/user/getAllUsers";
-import { Router } from "express";
+} from './../../controllers/user/getAllUsers'
+import { Router } from 'express'
 import {
     createAdmin,
     createEmployee,
+    createRoot,
     createSuperAdmin,
-} from "../../controllers/user/createUser";
+} from '../../controllers/user/createUser'
 import {
     deleteAdmin,
     deleteEmployee,
     deleteRoot,
     deleteSuperAdmin,
-} from "../../controllers/user/deleteUser";
+} from '../../controllers/user/deleteUser'
 import {
     getAllEmployees,
     getAllRoots,
     getAllSuperAdmins,
-} from "../../controllers/user/getAllUsers";
+} from '../../controllers/user/getAllUsers'
 import {
     getAdmin,
     getEmployee,
     getRoot,
-} from "../../controllers/user/getUserById";
+} from '../../controllers/user/getUserById'
 import {
     updateAdmin,
     updateEmployee,
     updateRoot,
     updateSuperAdmin,
     updateUser,
-} from "../../controllers/user/updateUser";
-import { checkRole } from "../../middlewares/access";
-import { authMiddleware } from "../../middlewares/auth";
+} from '../../controllers/user/updateUser'
+import { checkRole } from '../../middlewares/acsses'
+import { AuthenticationMiddleware } from '../../middlewares/auth'
 import {
     checkCreationPrivilage,
-    checkUpdatePrivilege,
-} from "../../middlewares/checkPrivileges";
-import checkUserFound from "../../middlewares/checkUserFound";
-import { validator } from "../../middlewares/validator";
-import { Roles } from "../../types/enums";
+    checkUpdatePrivilage,
+} from '../../middlewares/checkPrivilages'
+import checkUserFound from '../../middlewares/checkUserFound'
+import { validator } from '../../middlewares/validate'
+import { Roles } from '../../types/enums'
 import {
     validateUserPost,
     validateUserPut,
-} from "../../validators/user.validator";
-import { getMe } from "../../controllers/user";
-import { checkSubscribe } from "../../middlewares/subscription";
-
-
-const userRouter = Router();
+} from '../../validators/userValidator'
+import { getMe } from '../../controllers/user'
+import { checkSubscripe } from '../../middlewares/subscription'
+const userRouter = Router()
 //(START)________----_____-----_____ :> WHO CAN ACCESS ON THIS ROUTES : > ________----_____-----_____ (ROOT)
 // to get all admins on company
 userRouter
-    .route("/admins/company/:company")
+    .route('/admins/comapny/:company')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ROOT),
-        authAdminEmployee("admin", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('admin', 'get'),
+        checkSubscripe,
     )
-    .get(getAllAdminsInCompany);
-userRouter.route("/me").all(authMiddleware, checkSubscribe).get(getMe);
+    .get(getAllAdminsInCompany)
+userRouter.route('/me').all(AuthenticationMiddleware, checkSubscripe).get(getMe)
 // to get all admins on branch
 userRouter
-    .route("/admins/branch/:branch")
+    .route('/admins/branch/:branch')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ROOT),
-        authAdminEmployee("admin", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('admin', 'get'),
+        checkSubscripe,
     )
-    .get(getAllAdminsInBranch);
+    .get(getAllAdminsInBranch)
 // to get all admins on department
 userRouter
-    .route("/admins/department/:department")
+    .route('/admins/department/:department')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ROOT),
-        authAdminEmployee("admin", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('admin', 'get'),
+        checkSubscripe,
     )
-    .get(getAllEmployeesInDepartment);
+    .get(getAllEmployeesInDepartment)
 userRouter
-    .route("/admins")
-    .all(authMiddleware, checkSubscribe)
+    .route('/admins')
+    .all(AuthenticationMiddleware, checkSubscripe)
     .get(
         checkRole(Roles.ROOT),
-        authAdminEmployee("admin", "get"),
+        AuthuthrationAdminEmployee('admin', 'get'),
         getAllAdmins,
     )
     .post(
         checkRole(Roles.ROOT),
-        validator(validateUserPost, "post"),
-        authAdminEmployee("admin", "post"),
+        validator(validateUserPost, 'post'),
+        AuthuthrationAdminEmployee('admin', 'post'),
         checkUserFound,
         createAdmin,
-    );
+    )
 
 
 //(ADMIN,ROOT)
 userRouter
-    .route("/admins/:id")
-    .all(authMiddleware, checkSubscribe)
+    .route('/admins/:id')
+    .all(AuthenticationMiddleware, checkSubscripe)
     .get(
         checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE),
-        authAdminEmployee("admin", "get"),
+        AuthuthrationAdminEmployee('admin', 'get'),
         getAdmin,
     )
     .all(
         checkRole(Roles.ROOT),
-        authAdminEmployee("admin", "put"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('admin', 'put'),
+        checkSubscripe,
     )
     .put(
-        validator(validateUserPut, "put"),
+        validator(validateUserPut, 'put'),
         checkRole(Roles.ROOT, Roles.ADMIN),
         checkUserFound,
         updateAdmin,
     )
-    .delete(checkRole(Roles.ROOT), deleteAdmin);
+    .delete(checkRole(Roles.ROOT), deleteAdmin)
 //(END)________----_____-----_____ :> WHO CAN ACCESS ON THIS ROUTES : > ________----_____-----_____ (ROOT)
 
 //(START)________----_____-----_____ :> WHO CAN ACCESS ON THIS ROUTES : > ________----_____-----_____ (ROOT,EMPLOYEE,ADMIN)
 // to get all empolyees on company
-userRouter.route("/employees/getAllWithBranchAndDepartment/:companyId").get(authMiddleware,
-    checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE), getAllEmployeesInTheCompanyWithBranchAndDepartment);
+userRouter.route('/employees/getAllWithBranchAndDepartment/:companyId').get(AuthenticationMiddleware, checkRole(Roles.ADMIN, Roles.ROOT ,Roles.EMPLOYEE),getAllEmployeesInTheCompanyWithBranchAndDepartment)
 userRouter
-    .route("/employees/company/:company")
+    .route('/employees/company/:company')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE),
-        authAdminEmployee("employee", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('employee', 'get'),
+        checkSubscripe,
     )
-    .get(getAllEmployeesInComapny);
+    .get(getAllEmployeesInComapny)
 // to get all empolyees on branch
 userRouter
-    .route("/employees/branch/:branch")
+    .route('/employees/branch/:branch')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE),
-        authAdminEmployee("employee", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('employee', 'get'),
+        checkSubscripe,
     )
-    .get(getAllEmployeesInBranch);
+    .get(getAllEmployeesInBranch)
 // to get all empolyees on department
 userRouter
-    .route("/employees/department/:department")
+    .route('/employees/department/:department')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE),
-        authAdminEmployee("employee", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('employee', 'get'),
+        checkSubscripe,
     )
-    .get(getAllEmployeesInDepartment);
-// to get all employees on shift
+    .get(getAllEmployeesInDepartment)
+// to get all empolyees on shift
 userRouter
-    .route("/employees/shift/:shift")
+    .route('/employees/shift/:shift')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE),
-        authAdminEmployee("employee", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('employee', 'get'),
+        checkSubscripe,
     )
-    .get(getAllEmployeesInShift);
+    .get(getAllEmployeesInShift)
 userRouter
-    .route("/employees")
-    .all(authMiddleware, checkSubscribe, checkRole(Roles.ADMIN, Roles.ROOT))
-    .get(getAllEmployees)
+    .route('/employees')
+    .all(AuthenticationMiddleware, checkSubscripe, checkRole(Roles.ADMIN, Roles.ROOT),)
+    .get(getAllEmployees,)
     .post(
         checkUserFound,
-        validator(validateUserPost, "post"),
-        authAdminEmployee("employee", "post"),
+        validator(validateUserPost, 'post'),
+        AuthuthrationAdminEmployee('employee', 'post'),
         createEmployee,
-    );
+    )
 userRouter
-    .route("/employee/:id")
-    .all(authMiddleware, checkSubscribe)
+    .route('/employee/:id')
+    .all(AuthenticationMiddleware, checkSubscripe)
     .get(
         checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE),
-        authAdminEmployee("employee", "get"),
+        AuthuthrationAdminEmployee('employee', 'get'),
         getEmployee,
     )
     //(ADMIN,ROOT)
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.ROOT, Roles.ADMIN),
-        checkSubscribe,
+        checkSubscripe,
     )
     .put(
-        validator(validateUserPut, "put"),
-        authAdminEmployee("employee", "put"),
+        validator(validateUserPut, 'put'),
+        AuthuthrationAdminEmployee('employee', 'put'),
         checkUserFound,
         updateEmployee,
     )
-    .delete(authAdminEmployee("employee", "delete"), deleteEmployee);
+    .delete(AuthuthrationAdminEmployee('employee', 'delete'), deleteEmployee)
 //(EMPLOYEE)
 userRouter
-    .route("/employee/infoCompany")
+    .route('/employee/infoCompany')
     .all(
-        authMiddleware,
+        AuthenticationMiddleware,
         checkRole(Roles.EMPLOYEE),
-        authAdminEmployee("employee", "get"),
-        checkSubscribe,
+        AuthuthrationAdminEmployee('employee', 'get'),
+        checkSubscripe,
     )
-    .get(getRootAndAdmin);
+    .get(getRootAndAdmin)
 //(END)________----_____-----_____ :> WHO CAN ACCESS ON THIS ROUTES : > ________----_____-----_____ (ROOT,EMPLOYEE,ADMIN)
 userRouter
-    .route("/superadmins")
-    .all(authMiddleware, checkRole(Roles.SUPER_ADMIN))
+    .route('/superadmins')
+    .all(AuthenticationMiddleware, checkRole(Roles.SUPER_ADMIN))
     .get(getAllSuperAdmins)
-    .post(validator(validateUserPost, "post"), checkUserFound, createSuperAdmin);
+    .post(validator(validateUserPost, 'post'), checkUserFound, createSuperAdmin)
 userRouter
-    .route("/superadmins/:id")
-    .all(authMiddleware, checkRole(Roles.SUPER_ADMIN))
+    .route('/superadmins/:id')
+    .all(AuthenticationMiddleware, checkRole(Roles.SUPER_ADMIN))
     .get(getEmployee)
-    .all(checkUpdatePrivilege)
-    .patch(validator(validateUserPut, "put"), checkUserFound, updateSuperAdmin)
-    .delete(deleteSuperAdmin);
+    .all(checkUpdatePrivilage)
+    .patch(validator(validateUserPut, 'put'), checkUserFound, updateSuperAdmin)
+    .delete(deleteSuperAdmin)
 userRouter
-    .route("/roots")
-    .all(authMiddleware, checkRole(Roles.SUPER_ADMIN))
-    .get(getAllRoots);
+    .route('/roots')
+    .all(AuthenticationMiddleware, checkRole(Roles.SUPER_ADMIN))
+    .get(getAllRoots)
 // .post(checkRole(Roles.ADMIN, Roles.ROOT), checkUserFound, validator(validateUserPost,"post"), createRoot);
 userRouter
-    .route("/roots/:id")
-    .all(authMiddleware)
+    .route('/roots/:id')
+    .all(AuthenticationMiddleware)
     .get(getRoot, checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE, Roles.SUPER_ADMIN))
-    .all(checkRole(Roles.SUPER_ADMIN), checkUpdatePrivilege)
-    .patch(checkRole(Roles.ROOT), validator(validateUserPut, "put"), checkUserFound, updateRoot)
-    .delete(checkRole(Roles.SUPER_ADMIN), deleteRoot);
+    .all(checkRole(Roles.SUPER_ADMIN), checkUpdatePrivilage)
+    .patch(checkRole(Roles.ROOT), validator(validateUserPut, 'put'), checkUserFound, updateRoot)
+    .delete(checkRole(Roles.SUPER_ADMIN), deleteRoot)
 userRouter
-    .route("/me/")
-    .all(authMiddleware, checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE, Roles.SUPER_ADMIN), checkUserFound,
-        checkSubscribe)
-    .get(getMe);
+    .route('/me/')
+    .all(AuthenticationMiddleware, checkRole(Roles.ADMIN, Roles.ROOT, Roles.EMPLOYEE, Roles.SUPER_ADMIN), checkUserFound, checkSubscripe)
+    .get(getMe,)
 
-userRouter.route("/updateUser/:userId").put(authMiddleware,
-    checkRole(Roles.ADMIN, Roles.EMPLOYEE, Roles.ROOT), updateUser);
-userRouter.route("/:id").get(
-    authMiddleware, checkSubscribe,
-    checkRole(Roles.ADMIN, Roles.ROOT), getUser);
-userRouter.route("/employees/getAllByRole").get(authMiddleware, checkRole(Roles.ADMIN, Roles.EMPLOYEE, Roles.ROOT),
-    getAllEmpsBasedOnRole);
+userRouter.route('/updateUser/:userId').put(AuthenticationMiddleware,
+    checkRole(Roles.ADMIN, Roles.EMPLOYEE, Roles.ROOT), updateUser)
+    userRouter.route('/:id').get(       
+ AuthenticationMiddleware,  checkSubscripe,
+        checkRole(Roles.ADMIN, Roles.ROOT), getUser)
+userRouter.route('/employees/getAllByRole').get(AuthenticationMiddleware, checkRole(Roles.ADMIN, Roles.EMPLOYEE, Roles.ROOT), getAllEmpsBasedOnRole)
 
 // this will take the branch and department as query 
 
-export default userRouter;
+export default userRouter

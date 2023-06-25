@@ -1,10 +1,8 @@
 import Joi from "joi";
-import { IRequest } from "../models/request";
-import { ISubCategory } from "../models/subCategory";
+import { IRequest } from "../models/Request";
+import { ISubCategory } from "../models/SubCategory";
 
-
-export function validateSubCategory(subCategory: ISubCategory)
-{
+export function validateSubCategory(subCategory: ISubCategory) {
 
     // check the truthness of have time 
     // const haveTime = subCategory.haveTime;
@@ -17,11 +15,11 @@ export function validateSubCategory(subCategory: ISubCategory)
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden(),
         }),
-        category: Joi.object().alter({
+        category: Joi.objectId().alter({
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden(),
         }),
-
-    });
-    return schema.validate(subCategory);
+    
+    })
+    return schema.validate(subCategory)
 }

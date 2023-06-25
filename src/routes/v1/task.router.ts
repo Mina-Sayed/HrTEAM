@@ -1,85 +1,83 @@
-import { authTask } from "../../middlewares/authorization/task.authorization";
+import { AuthuthrationTask } from './../../middlewares/authuthrations/task.authuthration';
 import {
-    assignTask,
-    unassignTask,
-} from "../../controllers/task/task.controller";
-import { Roles } from "../../types/enums";
-import { checkRole } from "../../middlewares/access";
-import { authMiddleware } from "../../middlewares/auth";
-import { Router } from "express";
+  assginTask,
+  unassginTask,
+} from './../../controllers/task/task.controller'
+import { Roles } from './../../types/enums'
+import { checkRole } from './../../middlewares/acsses'
+import { AuthenticationMiddleware } from './../../middlewares/auth'
+import { Router } from 'express'
 import {
-    getAllTasks,
-    getTaskById,
-    updateTask,
-    deleteTask,
+  getAllTasks,
+  getTaskById,
+  updateTask,
+  deleteTask,
+  addTask,
+} from '../../controllers/task/task.controller'
+import { validator } from '../../middlewares/validate'
+import { taskValidation } from '../../validators/task.validator'
+import { checkSubscripe } from '../../middlewares/subscription'
+const router = Router()
+router
+  .route('/')
+  .all(
+    AuthenticationMiddleware,
+    checkRole(Roles.ROOT, Roles.ADMIN,Roles.EMPLOYEE),
+    checkSubscripe,
+  )
+  .get(AuthuthrationTask('task', 'all'), getAllTasks)
+  .post(
+    validator(taskValidation, 'post'),
+    AuthuthrationTask('task', 'post'),
     addTask,
-} from "../../controllers/task/task.controller";
-import { validator } from "../../middlewares/validator";
-import { taskValidation } from "../../validators/task.validator";
-import { checkSubscribe } from "../../middlewares/subscription";
-
-
-const router = Router();
+  )
+ 
 router
-    .route("/")
-    .all(
-        authMiddleware,
-        checkRole(Roles.ROOT, Roles.ADMIN, Roles.EMPLOYEE),
-        checkSubscribe,
-    )
-    .get(authTask("task", "all"), getAllTasks)
-    .post(
-        validator(taskValidation, "post"),
-        authTask("task", "post"),
-        addTask,
-    );
+  .route('/assgin/:id')
+  .all(
+    AuthenticationMiddleware,
+    checkRole(Roles.ROOT, Roles.ADMIN),
+    checkSubscripe,
+  )
+  .put(
+    validator(taskValidation, 'put'),
+    AuthuthrationTask('task', 'put'),
+    assginTask,
+  )
+router
+  .route('/unassgin/:id')
+  .all(
+    AuthenticationMiddleware,
+    checkRole(Roles.ROOT, Roles.ADMIN),
+    checkSubscripe,
+  )
+  .put(
+    validator(taskValidation, 'put'),
+    AuthuthrationTask('task', 'put'),
+    unassginTask,
+  )
+router
+  .route('/:id')
+  .all(
+    AuthenticationMiddleware,
+    checkRole(Roles.ROOT, Roles.ADMIN,Roles.EMPLOYEE),
+    checkSubscripe,
+  )
+  .get(
+    checkRole(Roles.ROOT, Roles.ADMIN, Roles.EMPLOYEE),
+    AuthuthrationTask('task', 'put'),
+    getTaskById,
+  )
+  .delete(
+    checkRole(Roles.ROOT, Roles.ADMIN,Roles.EMPLOYEE),
+    AuthuthrationTask('task', 'delete'),
+    deleteTask,
+  )
+  .put(
+    checkRole(Roles.ROOT, Roles.ADMIN,Roles.EMPLOYEE),
+    validator(taskValidation, 'put'),
+    AuthuthrationTask('task', 'put'),
+    updateTask,
+  )
 
-router
-    .route("/assign/:id")
-    .all(
-        authMiddleware,
-        checkRole(Roles.ROOT, Roles.ADMIN),
-        checkSubscribe,
-    )
-    .put(
-        validator(taskValidation, "put"),
-        authTask("task", "put"),
-        assignTask,
-    );
-router
-    .route("/unassign/:id")
-    .all(
-        authMiddleware,
-        checkRole(Roles.ROOT, Roles.ADMIN),
-        checkSubscribe,
-    )
-    .put(
-        validator(taskValidation, "put"),
-        authTask("task", "put"),
-        unassignTask,
-    );
-router
-    .route("/:id")
-    .all(
-        authMiddleware,
-        checkRole(Roles.ROOT, Roles.ADMIN, Roles.EMPLOYEE),
-        checkSubscribe,
-    )
-    .get(
-        checkRole(Roles.ROOT, Roles.ADMIN, Roles.EMPLOYEE),
-        authTask("task", "put"),
-        getTaskById,
-    )
-    .delete(
-        checkRole(Roles.ROOT, Roles.ADMIN, Roles.EMPLOYEE),
-        authTask("task", "delete"),
-        deleteTask,
-    )
-    .put(
-        checkRole(Roles.ROOT, Roles.ADMIN, Roles.EMPLOYEE),
-        validator(taskValidation, "put"),
-        authTask("task", "put"),
-        updateTask,
-    );
-
-export default router;
+export default router

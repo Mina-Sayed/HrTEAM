@@ -1,20 +1,18 @@
-import Joi from "joi";
-import { IRequest } from "../models/request";
+import Joi from "joi"
+import { IRequest } from "../models/Request"
 
-
-export const validateRequest = (request: IRequest) =>
-{
+export const validateRequest = (request: IRequest) => {
     const schema = Joi.object({
         title: Joi.any(),
-        subCategory: Joi.any(),
+        subCategory:Joi.any(),
         description: Joi.string().required(),
-        from: Joi.object(),
-        to: Joi.object(),
+        from: Joi.objectId(),
+        to: Joi.objectId(),
         startDate: Joi.date(),
         endDate: Joi.date(),
         status: Joi.boolean(),
-        ids: Joi.array(),
+        ids:Joi.array()
 
-    });
-    return schema.validate(request);
-};
+    })
+    return schema.validate(request)
+}

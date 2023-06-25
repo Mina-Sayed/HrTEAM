@@ -1,40 +1,38 @@
-import { authMiddleware } from "../../middlewares/auth";
-import { Response, Request, NextFunction, Router } from "express";
+import { AuthenticationMiddleware } from './../../middlewares/auth'
+
+import { Response, Request, NextFunction, Router } from 'express'
 import {
   addCompany,
   deleteCompanyById,
   getCompanyByName,
   getOwnerCompanies,
   updateCompanyByName,
-} from "../../controllers/company/company.controller";
-import { validator } from "../../middlewares/validator";
-import { ReqTypes, validateData } from "../../middlewares/validation.service";
-import { companySchema, validateCompany } from "../../validators/company.validator";
-import { checkRole } from "../../middlewares/access";
-import { Roles } from "../../types/enums";
-import { checkSubscribe } from "../../middlewares/subscription";
-import { authCompany } from "../../middlewares/authorization/compnay.authorization";
-
-
-const router = Router();
+} from '../../controllers/company/company.controller'
+import { validator } from '../../middlewares/validate'
+import { validateCompany } from '../../validators/company.validator'
+import { checkRole } from '../../middlewares/acsses'
+import { Roles } from '../../types/enums'
+import { checkSubscripe } from '../../middlewares/subscription'
+import { AuthuthrationCompany } from '../../middlewares/authuthrations/compnay.authuthration'
+const router = Router()
 router
-  .route("/")
-  .all(authMiddleware, checkSubscribe, checkRole(Roles.ROOT))
-  .post(validateData(companySchema, ReqTypes.body), addCompany)
-  .get(authCompany("company"), getOwnerCompanies);
+  .route('/')
+  .all(AuthenticationMiddleware, checkSubscripe, checkRole(Roles.ROOT))
+  .post(validator(validateCompany, 'post'), addCompany)
+  .get(AuthuthrationCompany('company'), getOwnerCompanies)
 router
-  .route("/:id")
-  .all(authMiddleware)
+  .route('/:id')
+  .all(AuthenticationMiddleware)
   .put(
-    authCompany("company"),
-    checkSubscribe,
+    AuthuthrationCompany('company'),
+    checkSubscripe,
     checkRole(Roles.ROOT),
-    validator(validateCompany, "put"),
+    validator(validateCompany, 'put'),
     updateCompanyByName,
   )
   .get(
-    authCompany("company"),
+    AuthuthrationCompany('company'),
     checkRole(Roles.ROOT, Roles.ADMIN),
     getCompanyByName,
-  ).delete(deleteCompanyById);
-export default router;
+  ).delete(deleteCompanyById)
+export default router

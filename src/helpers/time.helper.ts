@@ -1,20 +1,15 @@
-export function addMinutes(date: Date, minutes: any)
-{
+export function addMinutes(date: Date, minutes: any) {
     return new Date(date.getTime() + minutes * 60000);
 }
-
-export function deleteMinutes(date: Date, minutes: any)
-{
+export function deleteMinutes(date: Date, minutes: any) {
     return new Date(date.getTime() - minutes * 60000);
 }
-
-export function getDateWithHoursAndMins(date_future: any, date_now: any)
-{
-    if (new Date(date_now) == new Date(Date.now())) {
-        var _userOffset = date_now.getTimezoneOffset() * 60 * 1000; // user's offset time
-        var _centralOffset = 0 * 60 * 60 * 1000; //2 for central time - use whatever you need
-        date_now = new Date(date_now.getTime() - _userOffset + _centralOffset);
-    }
+export function getDateWithMuAnHAndS(date_future: any, date_now: any) {
+    // if (new Date(date_now) == new Date(Date.now())) {
+    //     var _userOffset = date_now.getTimezoneOffset() * 60 * 1000; // user's offset time
+    //     var _centralOffset = 0 * 60 * 60 * 1000; //2 for central time - use whatever you need
+    //     date_now = new Date(date_now.getTime() - _userOffset + _centralOffset);
+    // }
     // get total seconds between the times
     var delta = (Math.abs(date_future - date_now) / 1000);
     // calculate (and subtract) whole days
@@ -34,20 +29,18 @@ export function getDateWithHoursAndMins(date_future: any, date_now: any)
             hours: 0,
             minutes: 0,
             seconds: 0,
-            left: true,
-        };
+            left: true
+        }
     }
     return {
         days: days,
         hours: hours,
         minutes: minutes,
-        seconds: seconds,
+        seconds: seconds
 
-    };
+    }
 }
-
-export function originalTime(date_future: any, date_now: any)
-{
+export function originalTime(date_future: any, date_now: any) {
     // get total seconds between the times
     var delta = (Math.abs(date_future - date_now) / 1000);
     // calculate (and subtract) whole days
@@ -66,17 +59,15 @@ export function originalTime(date_future: any, date_now: any)
         hours: hours,
         minutes: minutes,
         seconds: seconds,
-        left: true,
-    };
-}
-
-export function timeLate(date_future: any, date_now: any)
-{
-    if (new Date(date_now) == new Date(Date.now())) {
-        var _userOffset = date_now.getTimezoneOffset() * 60 * 1000; // user's offset time
-        var _centralOffset = 0 * 60 * 60 * 1000; //2 for central time - use whatever you need
-        date_now = new Date(date_now.getTime() - _userOffset + _centralOffset);
+        left: true
     }
+}
+export function timeLate(date_future: any, date_now: any) {
+    // if (new Date(date_now) == new Date(Date.now())) {
+    //     var _userOffset = date_now.getTimezoneOffset() * 60 * 1000; // user's offset time
+    //     var _centralOffset = 0 * 60 * 60 * 1000; //2 for central time - use whatever you need
+    //     date_now = new Date(date_now.getTime() - _userOffset + _centralOffset);
+    // }
     // get total seconds between the times
     var delta = (Math.abs(date_future - date_now) / 1000);
     // calculate (and subtract) whole days
@@ -96,24 +87,22 @@ export function timeLate(date_future: any, date_now: any)
             hours: 0,
             minutes: 0,
             seconds: 0,
-            left: false,
-        };
+            left: false
+        }
     }
     return {
         days: days,
         hours: hours,
         minutes: minutes,
         seconds: seconds,
-        left: true,
-    };
+        left: true
+    }
 }
-
-export function setRightTimeNow(date_now: any)
-{
+export function setRightTimeNow(date_now: any) {
     var _userOffset = date_now.getTimezoneOffset() * 60 * 1000; // user's offset time
     var _centralOffset = 0 * 60 * 60 * 1000; //2 for central time - use whatever you need
     date_now = new Date(date_now.getTime() - _userOffset + _centralOffset);
 
-    return date_now;
+    return date_now
 }
 

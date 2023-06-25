@@ -1,32 +1,25 @@
 import { Router } from "express";
-import {
-    createPackage,
-    deletePackage,
-    getAllPackages,
-    getPackageById,
-    updatePackage,
-} from "../../controllers/packages";
-import { checkRole } from "../../middlewares/access";
-import { authMiddleware } from "../../middlewares/auth";
-import { validator } from "../../middlewares/validator";
+import { createPackage, deletePackage, getAllPackages, getPackageById, updatePackage } from "../../controllers/packages";
+import { checkRole } from "../../middlewares/acsses";
+import { AuthenticationMiddleware } from "../../middlewares/auth";
+import { validator } from "../../middlewares/validate";
 import { Roles } from "../../types/enums";
-import validatePackage from "../../validators/package.validator";
-
+import validatePackage from "../../validators/packageValidator";
 
 const packageRouter = Router();
 
-packageRouter.route("/")
+packageRouter.route('/')
     .get(getAllPackages)
-    .post(authMiddleware,
-        checkRole(Roles.SUPER_ADMIN),
-        validator(validatePackage, "post"),
-        createPackage);
+    .post(AuthenticationMiddleware,
+            checkRole(Roles.SUPER_ADMIN),
+            validator(validatePackage,"post"),
+            createPackage);
 
-packageRouter.route("/:id")
+packageRouter.route('/:id')
     .get(getPackageById)
-    .all(authMiddleware,
+    .all(AuthenticationMiddleware,
         checkRole(Roles.SUPER_ADMIN))
-    .put(validator(validatePackage, "put"), updatePackage)
+    .put(validator(validatePackage,"put"), updatePackage)
     .delete(deletePackage);
 
 export default packageRouter;

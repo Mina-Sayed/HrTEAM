@@ -1,25 +1,21 @@
-import Joi from "joi";
-
-
-export function validateBranch(branch: any)
-{
+import Joi from "joi"
+import { days } from "../types/enums";
+export function validateBranch(branch: any) {
     const shiftSchema = Joi.object({
         start_h: Joi.number().min(0).max(23).required(),
         start_mins: Joi.number().min(0).max(59).default(0),
         end_h: Joi.number().min(0).max(23).required()
-            .when("start_h",
+            .when('start_h',
                 {
                     is: Joi.number(),
-                    then: Joi.number().greater(Joi.ref("start_h")),
+                    then: Joi.number().greater(Joi.ref('start_h'))
                 }),
         end_mins: Joi.number().min(0).max(59).default(0),
     });
     const schema = Joi.object({
         name: Joi.string().min(2).max(255).required(),
-        company: Joi.object().alter({
-            post: (schema: {
-                required: () => any
-            }) => schema.required(),
+        company: Joi.objectId().alter({
+            post: (schema: { required: () => any }) => schema.required(),
         }),
         // shifts: Joi.array().items({
         //     work: shiftSchema,
@@ -28,16 +24,13 @@ export function validateBranch(branch: any)
         // }),
         fixedHolidays: Joi.array().items(Joi.date()),
         lat: Joi.number().alter({
-            post: (schema: {
-                required: () => any
-            }) => schema.required(),
+            post: (schema: { required: () => any }) => schema.required(),
         }),
         long: Joi.number().alter({
-            post: (schema: {
-                required: () => any
-            }) => schema.required(),
-        }),
+            post: (schema: { required: () => any }) => schema.required(),
+        })
 
     });
-    return schema.validate(branch);
+    const result = schema.validate(branch);
+    return result;
 };
