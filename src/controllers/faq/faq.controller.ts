@@ -14,7 +14,7 @@ export const createFaq = async (req: Request, res: Response) => {
     }
 }
 
-export const getAllFaqs = async (res: Response) => {
+export const getAllFaqs = async (_req: Request, res: Response) => {
     try {
         const faqs = await Faq.find();
         return res.status(200).json(faqs);
