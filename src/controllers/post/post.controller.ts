@@ -1,21 +1,17 @@
 import { Request, Response } from "express";
-import fs from "fs";
-import path from "path";
-import Post, { IPost } from "../../models/posts";
+import Post,{ IPost } from "../../models/posts";
 
-export const createComment = async (req: Request, res: Response) => {
 
-    const comments = req.body;
-
-    try {
-        const newComment = await Post.create(comments);
-        return res.status(201).json(newComment);
-    }
-    catch (error) {
-        return res.status(500).json({ error: "Internal server error" });
-    }
-    
-}
+export const createComment = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { title, content, comments, image }: IPost = req.body;
+    const newPost = await Post.create({ title, content, comments, image });
+    res.status(201).json(newPost);
+  } catch (error) {
+    console.error("Error creating post:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export const getAllPosts = async (req: Request, res: Response) => {
     try {
