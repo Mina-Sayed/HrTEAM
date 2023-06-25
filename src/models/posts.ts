@@ -5,7 +5,7 @@ export interface IPost extends Document {
   title: string;
   content: string;
   image: string;
-  comments: Array<{ text: string }>;
+  comments: Array<{ text: object }>;
   createdAt: Date;
   updatedAt: Date;
 }
