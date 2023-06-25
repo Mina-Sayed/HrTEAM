@@ -7,11 +7,11 @@ export const subTaskValidation = (subTask: ISubTask) => {
     description: Joi.string().required(),
     start: Joi.date().required(),
     end: Joi.date().required(),
-    task: Joi.objectId().required(),
+    task: Joi.object().required(),
     isAccepted: Joi.boolean().required(),
-    from: Joi.objectId().required(),
-    company:Joi.objectId(),
-    branch:Joi.objectId()
+    from: Joi.object().required(),
+    company:Joi.object(),
+    branch:Joi.object()
   })
   const result = schema.validate(subTask)
   return result

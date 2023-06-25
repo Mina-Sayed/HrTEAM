@@ -14,7 +14,7 @@ export function validateBranch(branch: any) {
     });
     const schema = Joi.object({
         name: Joi.string().min(2).max(255).required(),
-        company: Joi.objectId().alter({
+        company: Joi.object().alter({
             post: (schema: { required: () => any }) => schema.required(),
         }),
         // shifts: Joi.array().items({

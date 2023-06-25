@@ -15,7 +15,7 @@ export function validateSubCategory(subCategory: ISubCategory) {
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden(),
         }),
-        category: Joi.objectId().alter({
+        category: Joi.object().alter({
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden(),
         }),

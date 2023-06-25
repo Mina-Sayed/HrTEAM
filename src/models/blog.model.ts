@@ -83,10 +83,10 @@ export const blogValidation = (blog: IBlog, reqType: any) => {
     //   post: (schema: any) => schema.required(),
     //   put: (schema: any) => schema.forbidden(),
     // }),
-    comments: Joi.array().items(Joi.objectId()),
+    comments: Joi.array().items(Joi.object()),
 
     likes: Joi.array().items({
-      user: Joi.objectId().required(),
+      user: Joi.object().required(),
     }),
     blogType: Joi.string().valid('event', 'blog'),
 
@@ -102,7 +102,7 @@ export const blogValidation = (blog: IBlog, reqType: any) => {
     }),
     likeType: Joi.string().valid(...LikesArr),
     image: Joi.string(),
-    company: Joi.objectId()
+    company: Joi.object()
   })
 
   return schema.tailor(reqType).validate(blog)

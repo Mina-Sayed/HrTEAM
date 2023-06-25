@@ -8,7 +8,7 @@ export function validateOvertime(overtime: IoverTime) {
         end: Joi.date().alter({
             post: (schema) => schema.required(),
         }),
-        shift: Joi.objectId().alter({
+        shift: Joi.object().alter({
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden()
         })

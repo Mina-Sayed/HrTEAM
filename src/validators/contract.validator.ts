@@ -3,14 +3,14 @@ import { IContract } from '../models/Contract'
 
 export const ContractValidation = (contract: IContract, typeReq: any) => {
   const validationSchema = Joi.object({
-    employee: Joi.objectId().required(),
+    employee: Joi.object().required(),
     bankAccount: Joi.object().keys({
       accountName: Joi.string(),
       accountNumber: Joi.number(),
       balance: Joi.number(),
     }),
-    branch: Joi.objectId().required(),
-    department: Joi.objectId().required(),
+    branch: Joi.object().required(),
+    department: Joi.object().required(),
     salary: Joi.number().required(),
     duration: Joi.number().required(),
     startDate: Joi.date().required(),

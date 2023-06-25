@@ -27,7 +27,7 @@ export const validateBreak = (breakTime: Ibreak,mode:any) => {
       }).required(),
       otherwise: Joi.forbidden(),
     }),
-    shift: Joi.objectId().alter({
+    shift: Joi.object().alter({
       post: (schema: any) => schema.required(),
       put: (schema: any) => schema.forbidden(),
     }),

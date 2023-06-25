@@ -9,7 +9,7 @@ export const taskValidation = (task: ITask, reqType: any) => {
         end: Joi.date().alter({
             post: (schema: any) => schema.required(),
         }),
-        to: Joi.array().items(Joi.objectId().alter({
+        to: Joi.array().items(Joi.object().alter({
             post: (schema: any) => schema.required(),
         }),),
         title: Joi.string().alter({
@@ -18,8 +18,8 @@ export const taskValidation = (task: ITask, reqType: any) => {
         description: Joi.string().alter({
             post: (schema: any) => schema.required(),
         }),
-        company: Joi.objectId(),
-        branch: Joi.objectId(),
+        company: Joi.object(),
+        branch: Joi.object(),
         status: Joi.string().valid('in progress', 'completed')
     })
     return schema.tailor(reqType).validate(task)

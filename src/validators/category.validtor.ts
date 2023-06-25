@@ -6,7 +6,7 @@ export function validateCategory(subCategory: ICategory) {
     // const haveTime = subCategory.haveTime;
     const schema = Joi.object({
         categoryType: Joi.string().required(),
-        company: Joi.objectId()
+        company: Joi.object()
     })
     return schema.validate(subCategory)
 }

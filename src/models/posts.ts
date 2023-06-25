@@ -8,6 +8,7 @@ export interface IPost {
     content: string;
     image: string;
     creator: mongoose.Schema.Types.ObjectId;
+    comments: ObjectId[];
     createdAt: Date;
     updatedAt: Date;
 };
@@ -31,6 +32,13 @@ const PostSchema = new Schema<IPost>({
         ref: "User",
         required: true,
     },
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Comment",
+        },
+    ],
+    
     createdAt: {
         type: Date,
         default: Date.now,

@@ -40,16 +40,16 @@ export const commentValidation = (comment: IComment,reqType:any) => {
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden(),
         }),
-        user: Joi.objectId().alter({
+        user: Joi.object().alter({
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden(),
         }),
-        blog: Joi.objectId().alter({
+        blog: Joi.object().alter({
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden(),
         }),
         rating: Joi.number(),
-        replys: Joi.array().items(Joi.objectId())
+        replys: Joi.array().items(Joi.object())
     })
     return schema.tailor(reqType).validate(comment)
 }

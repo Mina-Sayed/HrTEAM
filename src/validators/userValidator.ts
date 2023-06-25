@@ -50,14 +50,14 @@ const validateUserPost = (user: any, reqType: any) => {
     position: Joi.string().min(2).max(255),
     branch: Joi.when('role', {
       is: Joi.valid(Roles.EMPLOYEE, Roles.ADMIN),
-      then: Joi.objectId().alter({
+      then: Joi.object().alter({
         post: (schema: { required: () => any }) => schema.required(),
         put: (schema: { forbidden: () => any }) => schema.forbidden(),
       }),
     }),
     department: Joi.when('role', {
       is: Joi.valid(Roles.EMPLOYEE, Roles.ADMIN),
-      then: Joi.objectId().alter({
+      then: Joi.object().alter({
         post: (schema: { required: () => any }) => schema.required(),
         put: (schema: { forbidden: () => any }) => schema.forbidden(),
       }),
@@ -77,7 +77,7 @@ const validateUserPost = (user: any, reqType: any) => {
     role: Joi.string(),
     shift: Joi.when('role', {
       is: Joi.valid(Roles.EMPLOYEE, Roles.ADMIN),
-      then: Joi.objectId().alter({
+      then: Joi.object().alter({
         post: (schema: { required: () => any }) => schema.required(),
         put: (schema: { forbidden: () => any }) => schema.forbidden(),
       }),

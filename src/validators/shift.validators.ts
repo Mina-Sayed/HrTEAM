@@ -131,7 +131,7 @@ export const validateShift = (shift: IShift, reqType: any) => {
       .alter({
         post: (schema) => schema.required(),
       }),
-    branch: joi.objectId().alter({
+    branch: joi.object().alter({
       post: (schema: any) => schema.required(),
     }),
     start_day: joi

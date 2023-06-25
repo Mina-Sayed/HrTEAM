@@ -3,44 +3,18 @@ import fs from "fs";
 import path from "path";
 import Post, { IPost } from "../../models/posts";
 
-export const createPost = async (req: Request, res: Response) => {
+export const createComment = async (req: Request, res: Response) => {
+
+    const comments = req.body;
+
     try {
-        // const form = formidable({ multiples: true });
-
-        // await form.parse(req, async (err: any, fields: Fields, files: Files) => {
-        //     if (err) {
-        //         return res.status(400).json({ error: "Error parsing form data" });
-        //     }
-
-        //     const { title, content, creator } = fields;
-
-        //     // Process the uploaded file
-        //     const imageFile = files.image as formidable.File;
-        //     if (!imageFile) {
-        //         return res.status(400).json({ error: "Image file is required" });
-        //     }
-
-        //     // Generate a unique filename
-        //     const imageFilename = `${uuidv4()}${path.extname(imageFile.name || "")}`;
-
-        //     // Move the file to a desired location
-        //     const uploadPath = path.join(__dirname, "../uploads", imageFilename);
-        //     fs.renameSync(imageFile.path || "", uploadPath);
-
-        //     const newPost: IPost = new Post({
-        //         title,
-        //         content,
-        //         image: imageFilename,
-        //         creator,
-        //     });
-
-        //     const savedPost = await newPost.save();
-
-        //     return res.status(201).json({ message: "Post created successfully", post: savedPost });
-        // });
-    } catch (error) {
+        const newComment = await Post.create(comments);
+        return res.status(201).json(newComment);
+    }
+    catch (error) {
         return res.status(500).json({ error: "Internal server error" });
     }
+    
 }
 
 export const getAllPosts = async (req: Request, res: Response) => {

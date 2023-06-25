@@ -3,7 +3,7 @@ import { ICompany } from "../models/Company";
 export function validateCompany(company: any) {
     const schema = Joi.object<ICompany>({
         name: Joi.string().min(1).max(255).required(),
-        owner: Joi.objectId().alter({
+        owner: Joi.object().alter({
             post: (schema: any) => schema.required(),
             put: (schema: any) => schema.forbidden()
         })

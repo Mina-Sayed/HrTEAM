@@ -19,7 +19,7 @@ import contract from './routes/v1/contract.router'
 import payrol from './routes/v1/payrol.router'
 import task from './routes/v1/task.router'
 import subtask from './routes/v1/subtask.router'
-Joi.objectId = require('joi-objectid')(Joi)
+Joi.object = require('joi-objectid')(Joi)
 import company from './routes/v1/company.router'
 import overTime from './routes/v1/overtime.router'
 import Break from './routes/v1/break.router'
