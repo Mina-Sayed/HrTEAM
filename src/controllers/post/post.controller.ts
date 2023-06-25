@@ -1,45 +1,43 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import path from "path";
-import { v4 as uuidv4 } from "uuid";
-import formidable, { Fields, Files } from "formidable";
 import Post, { IPost } from "../../models/posts";
 
 export const createPost = async (req: Request, res: Response) => {
     try {
-        const form = formidable({ multiples: true });
+        // const form = formidable({ multiples: true });
 
-        await form.parse(req, async (err: any, fields: Fields, files: Files) => {
-            if (err) {
-                return res.status(400).json({ error: "Error parsing form data" });
-            }
+        // await form.parse(req, async (err: any, fields: Fields, files: Files) => {
+        //     if (err) {
+        //         return res.status(400).json({ error: "Error parsing form data" });
+        //     }
 
-            const { title, content, creator } = fields;
+        //     const { title, content, creator } = fields;
 
-            // Process the uploaded file
-            const imageFile = files.image as formidable.File;
-            if (!imageFile) {
-                return res.status(400).json({ error: "Image file is required" });
-            }
+        //     // Process the uploaded file
+        //     const imageFile = files.image as formidable.File;
+        //     if (!imageFile) {
+        //         return res.status(400).json({ error: "Image file is required" });
+        //     }
 
-            // Generate a unique filename
-            const imageFilename = `${uuidv4()}${path.extname(imageFile.name || "")}`;
+        //     // Generate a unique filename
+        //     const imageFilename = `${uuidv4()}${path.extname(imageFile.name || "")}`;
 
-            // Move the file to a desired location
-            const uploadPath = path.join(__dirname, "../uploads", imageFilename);
-            fs.renameSync(imageFile.path || "", uploadPath);
+        //     // Move the file to a desired location
+        //     const uploadPath = path.join(__dirname, "../uploads", imageFilename);
+        //     fs.renameSync(imageFile.path || "", uploadPath);
 
-            const newPost: IPost = new Post({
-                title,
-                content,
-                image: imageFilename,
-                creator,
-            });
+        //     const newPost: IPost = new Post({
+        //         title,
+        //         content,
+        //         image: imageFilename,
+        //         creator,
+        //     });
 
-            const savedPost = await newPost.save();
+        //     const savedPost = await newPost.save();
 
-            return res.status(201).json({ message: "Post created successfully", post: savedPost });
-        });
+        //     return res.status(201).json({ message: "Post created successfully", post: savedPost });
+        // });
     } catch (error) {
         return res.status(500).json({ error: "Internal server error" });
     }
