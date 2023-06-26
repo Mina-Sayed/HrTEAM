@@ -36,6 +36,7 @@ import postRouter from "./routes/v1/post.router";
 import servicesRouter from "./routes/v1/services.router";
 import faqRoute from "./routes/v1/faq.router";
 import contactRoute from "./routes/v1/contactus.router";
+import imageClient from "./routes/v1/image.router"
 import fs from "fs"
 // import ip from 'ip'
 // const API_KEY = 'c0d773f89b0b8d96b8ec209db1b72153a8c5aefcf33813684dd561dd'
@@ -94,7 +95,8 @@ app.use(errorHandler)
   .use("/teamHR/api/v1/post", postRouter)
   .use("/teamHR/api/v1/services", servicesRouter)
   .use("/teamHR/api/v1/faq", faqRoute)
-  .use('/teamHR/api/v1/contactUs', contactRoute )
+  .use('/teamHR/api/v1/contactUs', contactRoute)
+  .use('/teamHR/api/v1/client', imageClient)
   .use('/uploads', express.static('./uploads'))
   .post('/teamHR/api/v1/upload', upload.single('image'), (req:any, res:any) => {
     res.status(200).send({ filename: req.file?.filename })
