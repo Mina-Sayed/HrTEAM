@@ -37,7 +37,7 @@ const ServicesSchema = new mongoose_1.Schema({
     },
     image: {
         type: String,
-        required: true,
+        // required: true,
     },
     creator: {
         type: mongoose_1.default.Schema.Types.ObjectId,

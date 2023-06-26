@@ -1,28 +1,35 @@
-// controllers/imageController.ts
-
 import { Request, Response } from "express";
-import Image from "../../models/imageModel";
+import Image, { IImage } from "../../models/imageModel";
+import { upload } from "../../middlewares/uploads";
 
-export const uploadImage = async (req: Request, res: Response) => {
-    try {
-      if (!req.file) {
-        res.status(400).json({ error: "No image file provided" });
-        return;
-      }
-  
-      const image = new Image({
-        filename: req.file.filename,
-        filepath: req.file.path,
-      });
-  
-      const savedImage = await image.save();
-      res.status(201).json(savedImage);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      res.status(500).json({ error: "Error uploading image" });
+export const uploadImage = (req: Request, res: Response) => {
+  upload.single("image")(req, res, async (err: any) => {
+    if (err) {
+      console.error("Error uploading image:", err);
+      return res.status(500).json({ error: "Failed to upload image" });
     }
-  };
-  
+
+    if (!req.file) {
+      console.log("No image uploaded");
+      return res.status(400).json({ error: "No image uploaded" });
+    }
+
+    const { originalname, filename, path } = req.file;
+
+    try {
+      // Create a new image document
+      const newImage: IImage = await Image.create({
+        imageClient: originalname,
+      });
+
+      return res.status(201).json(newImage);
+    } catch (error) {
+      console.error("Error saving image:", error);
+      return res.status(500).json({ error: "Failed to save image" });
+    }
+  });
+};
+
 export const getAllImages = async (req: Request, res: Response) => {
   try {
     const images = await Image.find();

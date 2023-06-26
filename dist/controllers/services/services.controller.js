@@ -14,20 +14,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteService = exports.updateService = exports.getServiceById = exports.getAllServices = exports.createService = void 0;
 const services_1 = __importDefault(require("../../models/services"));
+const mongoose_1 = require("mongoose");
 const createService = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { title, content, image, creator } = req.body;
-        const newService = new services_1.default({
-            title,
-            content,
-            image,
-            creator,
-        });
-        const savedService = yield newService.save();
-        return res.status(201).json({ message: "Service created successfully", service: savedService });
+        // Access the uploaded file through req.file
+        if (req.file) {
+            console.log("Uploaded image:", req.file.filename);
+            const { title, content, creator } = req.body;
+            // Create a new service with the file path
+            const newService = new services_1.default({
+                title,
+                content,
+                image: req.file.path,
+                creator: new mongoose_1.Types.ObjectId(creator),
+            });
+            yield newService.save();
+            return res.status(201).json(newService);
+        }
+        else {
+            console.log("No image uploaded");
+            const { title, content, creator } = req.body;
+            // Create a new service without the file path
+            const newService = new services_1.default({
+                title,
+                content,
+                creator: new mongoose_1.Types.ObjectId(creator),
+            });
+            yield newService.save();
+            return res.status(201).json(newService);
+        }
     }
     catch (error) {
-        return res.status(500).json({ error: "Internal server error" });
+        console.error("Error creating service:", error);
+        return res.status(500).json({ error: "Failed to create service" });
     }
 });
 exports.createService = createService;
