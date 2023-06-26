@@ -22,7 +22,7 @@ const ServicesSchema = new Schema<IService>({
     },
     image: {
         type: String,
-        required: true,
+        // required: true,
     },
     creator: {
         type: mongoose.Schema.Types.ObjectId,
