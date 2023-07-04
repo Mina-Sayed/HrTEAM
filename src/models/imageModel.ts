@@ -5,7 +5,7 @@ export interface IImage extends Document {
 }
 
 const ImageSchema = new mongoose.Schema<IImage>({
-  imageCilent: { type: String, required: true },
+  imageCilent: { type: String },
 });
 
 const Image: Model<IImage> = mongoose.model<IImage>("Image", ImageSchema);
