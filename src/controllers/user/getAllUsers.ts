@@ -69,6 +69,27 @@ export const getAllAdmins = async (
   }
   // const allEmployees = await User.find({ role: 'employee', company: req.user!.company });
 }
+//@desc         get all users
+//@route        GET /api/v1/users/
+//@access       private(admin, root, employee)
+export const getAllUsers = async (
+  req: AuthenticatedReq,
+  res: Response,
+  next: NextFunction,
+) => {
+  
+  const users = await User.find({role:Roles.USER})
+ 
+   
+      return res.send({
+        success: true,
+        data: users,
+        message: 'Users are fetched successfully',
+      })
+    
+  
+  // const allEmployees = await User.find({ role: 'employee', company: req.user!.company });
+}
 //@desc         get all admins in company
 //@route        GET /api/v1/users/admins/:company
 //@access       private(admin, root)

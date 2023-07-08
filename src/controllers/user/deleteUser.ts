@@ -36,6 +36,28 @@ export const deleteSuperAdmin = async (
     data: deletedSuperAdmin,
   })
 }
+// -----------------------------------
+//@desc         delete user
+//@route        DELETE /api/v1/user/:id
+//@access       private(super admins)
+export const deleteUser = async (
+  req: AuthenticatedReq,
+  res: Response,
+  next: NextFunction,
+) => {
+  const deletedUser = await User.deleteOne({
+    _id: req.params.id,
+    role: Roles.USER,
+  })
+ 
+  res.status(204).send({
+    success: true,
+    message: 'User is deleted successfully',
+  })
+}
+// --------------------------------------
+
+
 
 //@desc         delete root
 //@route        DELETE /api/v1/users/roots/:id
