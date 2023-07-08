@@ -12,6 +12,7 @@ import {
     getAllEmployeesInShift,
     getAllEmpsBasedOnRole,
     getAllEmployeesInTheCompanyWithBranchAndDepartment,
+    getAllUsers,
 } from './../../controllers/user/getAllUsers'
 import { Router } from 'express'
 import {
@@ -25,6 +26,7 @@ import {
     deleteEmployee,
     deleteRoot,
     deleteSuperAdmin,
+    deleteUser,
 } from '../../controllers/user/deleteUser'
 import {
     getAllEmployees,
@@ -253,4 +255,7 @@ userRouter.route('/employees/getAllByRole').get(AuthenticationMiddleware, checkR
 
 // this will take the branch and department as query 
 
+// SUPER ADMIN 
+userRouter.route('/').all(AuthenticationMiddleware,checkRole(Roles.SUPER_ADMIN)).get(getAllUsers),
+userRouter.route('/:id').all(AuthenticationMiddleware,checkRole(Roles.SUPER_ADMIN)).delete(deleteUser)
 export default userRouter

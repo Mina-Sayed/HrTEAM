@@ -30,7 +30,8 @@ export const getPackageById = async (req: Request, res: Response, next: NextFunc
 //@route        POST /api/v1/packages
 //@access       private(super admin)
 export const createPackage = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
-    const packageCreated = await Package.create(req.body);
+    const packageCreated = new Package({...req.body})
+    packageCreated.save()
     res.status(201).send({
         success: true,
         data: packageCreated,
@@ -42,7 +43,11 @@ export const createPackage = async (req: AuthenticatedReq, res: Response, next: 
 //@route        PATCH /api/v1/packages/:id
 //@access       private(super admin)
 export const updatePackage = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
-    const packageCreated = await Package.create(req.body);
+    const packageCreated = await Package.updateOne({_id:req.params.id},{
+        $set:{
+            ...req.body
+        }
+    });
     res.send({
         success: true,
         data: packageCreated,

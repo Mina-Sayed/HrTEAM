@@ -8,7 +8,10 @@ import { Roles } from "../../types/enums";
 //@route        GET /api/v1/subscriptions
 //@access       private(super admin)
 export const getAllsubscriptions = async (req: AuthenticatedReq, res: Response, next: NextFunction) => {
-    const allsubscriptions = await Subscription.find({});
+    const allsubscriptions = await Subscription.find({}).populate([
+        {path:'subscriber', model:"User"},
+        {path:'package', model:"Package"}
+        ]);
     res.send({
         success: true,
         data: allsubscriptions,
