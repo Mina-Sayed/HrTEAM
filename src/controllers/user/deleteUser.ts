@@ -45,16 +45,25 @@ export const deleteUser = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const deletedUser = await User.deleteOne({
+  const deletedUser = await User.findOneAndDelete({
     _id: req.params.id,
     role: Roles.USER,
-  })
+  });
  
-  res.status(204).send({
-    success: true,
-    message: 'User is deleted successfully',
-  })
-}
+  if (deletedUser) {
+    res.status(200).send({
+      success: true,
+      message: 'User is deleted successfully',
+      data: deletedUser,
+    });
+  } else {
+    res.status(404).send({
+      success: false,
+      message: 'User not found',
+    });
+  }
+};
+
 // --------------------------------------
 
 
