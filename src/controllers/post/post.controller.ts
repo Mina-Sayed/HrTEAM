@@ -1,35 +1,33 @@
 import { Request, Response } from "express";
 import Post,{ IPost } from "../../models/posts";
-import multer from "multer";
+// import multer from "multer";
 // import { Types } from "mongoose";
 
 // Controller for creating a new post
+/**
+ * Create a new comment.
+ * 
+ * @param req - The request object.
+ * @param res - The response object.
+ */
 export const createComment = async (req: Request, res: Response) => {
-  try {
-    const { title, content } = req.body;
-    // const image = req.file?.fieldname ? req.file.path : ""; // Assuming you have configured Multer middleware to handle file uploads
-
-
-    const  originalname  = req.file?.originalname;
-
-    // Create a new image document
-    const newImage: IPost = await Post.create({ image: originalname, title, content, comments: [] });
-
-
-
-    // const post: IPost = new Post({
-    //   title,
-    //   content,
-    //   comments: [],
-    // });
-
-    const savedPost = await newImage.save();
-    res.status(201).json(savedPost);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create a new post" });
-  }
-};
-
+    try {
+      const { title, content } = req.body;
+      const image = req.file?.fieldname ? req.file.path : ""; // Assuming you have configured Multer middleware to handle file uploads
+       const post: IPost = new Post({
+        title,
+        content,
+        image,
+        comments: [],
+      });
+       const savedPost = await post.save();
+      // Include the image name in the response
+      savedPost.image = req.file?.fieldname ? req.file.filename : ""; 
+       res.status(201).json(savedPost);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to create a new post" });
+    }
+  };
 
 
 
