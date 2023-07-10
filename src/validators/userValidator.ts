@@ -37,7 +37,8 @@ const validateUserPost = (user: any, reqType: any) => {
       .min(7)
       .max(15)
       .pattern(/^[0-9]+$/)
-      .required(),
+      // .required(),
+      ,
     company: Joi.when('role', {
       is: Joi.valid(Roles.EMPLOYEE, Roles.ADMIN),
       then: Joi.string().required(),
