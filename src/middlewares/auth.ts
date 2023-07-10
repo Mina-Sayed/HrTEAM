@@ -14,6 +14,11 @@ export const AuthenticationMiddleware = async function (
     try {
         //Get Token From Header Of Request And Check If Token Is Exist
         const token: string | undefined = req.header("Authentication");
+        console.log('Authorization: ',req.headers['authorization'])
+        console.log('Authorization: ',req.headers['Authentication'])
+        console.log('Authorization: ',req.headers)
+
+
         if (!token) return res.status(401).send({ error_en: "Access Denied!!" });
         //decoded Token And Find In Mongoo db By id Then CHeck If user Exist
         const decoded: any = jwt.verify(token, process.env.JWT_KEY!);

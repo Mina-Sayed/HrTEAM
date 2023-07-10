@@ -65,7 +65,7 @@ app
 
 //   res.send(info)
 // })
-app.use(errorHandler)
+
   .use(express.json())
 
   // .use(errorHandler)
@@ -101,6 +101,8 @@ app.use(errorHandler)
   .post('/teamHR/api/v1/upload', upload.single('image'), (req:any, res:any) => {
     res.status(200).send({ filename: req.file?.filename })
   })
+
+  app.use(errorHandler)
   .all('*', (req: Request, res: Response) =>
     res.status(404).send({ message: 'Undefinded Routes' }),
   )

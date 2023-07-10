@@ -221,7 +221,7 @@ userRouter
     .route('/superadmins')
     .all(AuthenticationMiddleware, checkRole(Roles.SUPER_ADMIN))
     .get(getAllSuperAdmins)
-    .post(validator(validateUserPost, 'post'), checkUserFound, createSuperAdmin)
+    .post(createSuperAdmin)
 userRouter
     .route('/superadmins/:id')
     .all(AuthenticationMiddleware, checkRole(Roles.SUPER_ADMIN))

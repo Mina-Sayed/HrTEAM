@@ -13,18 +13,17 @@ import Post,{ IPost } from "../../models/posts";
 export const createComment = async (req: Request, res: Response) => {
     try {
       const { title, content } = req.body;
-      const image = req.file?.fieldname ? req.file.path : ""; // Assuming you have configured Multer middleware to handle file uploads
+      console.log(req.body)
+    //   const image = req.file?.fieldname ? req.file.path : ""; // Assuming you have configured Multer middleware to handle file uploads
        const post: IPost = new Post({
-        title,
-        content,
-        image,
-        comments: [],
+        ...req.body,comments:[]
       });
        const savedPost = await post.save();
       // Include the image name in the response
-      savedPost.image = req.file?.fieldname ? req.file.filename : ""; 
+      savedPost.image = req.body?.image ? req.body?.image : ""; 
        res.status(201).json(savedPost);
     } catch (error) {
+        console.log(error)
       res.status(500).json({ error: "Failed to create a new post" });
     }
   };

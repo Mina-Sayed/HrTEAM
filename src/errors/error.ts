@@ -23,10 +23,16 @@ export const errorHandler = (
   if (err.name == 'ValidationError') {
     const message = Object.values(err.errors).map((val: any) => val.message)
     error = new ErorrResponse(message, 500)
-  }
-  console.log(err)
+    console.log("🚀 ~ file: error.ts:26 ~ error:", error)}
 
-  res.status(error?.statusCode || 500).send({
+  if(err.name=="RangeError"){
+    // const message = Object.values(err.errors).map((val: any) => val.message)
+    error = new ErorrResponse(`${err.message} reason: ${err.stack}`, 500)
+    console.log("🚀 ~ file: error.ts:26 ~ error:", error)
+  }
+  console.log("Tthis is The Error: ",error.statusCode)
+
+  res.status(500).send({
     success: false,
     error: error?.message || 'SERVER ERROR',
   })
