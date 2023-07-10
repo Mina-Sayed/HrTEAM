@@ -23,8 +23,8 @@ export const createSuperAdmin = async (
     message: 'super admin is created successfully',
     data: createdUser,
   })
-  // next()
-} 
+
+}
 
 //@desc         create root
 //@route        POST /api/v1/users/roots
