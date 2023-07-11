@@ -7,6 +7,6 @@ import { validateUserPost } from '../../validators/userValidator';
 const authRouter = Router()
 
 authRouter.post('/login', login)
-authRouter.post('/register', validator(validateUserPost, 'post'), createUser)
+authRouter.post('/register', createUser)
 
 export default authRouter
